@@ -1,0 +1,36 @@
+.notfound {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.notfound__code {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 8rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.notfound h1 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.notfound p {
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.notfound__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}

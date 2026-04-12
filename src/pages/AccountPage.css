@@ -1,0 +1,120 @@
+.account-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.account-card,
+.account-info,
+.account-password {
+  padding: 24px;
+}
+
+.account-card__header h3,
+.account-info h3,
+.account-password h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+/* Avatar */
+.account-avatar {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.account-avatar__circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+}
+
+.account-form .form-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Side */
+.account-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Account Info */
+.account-info__items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.account-info__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+}
+
+.account-info__item svg {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.account-info__label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-bottom: 2px;
+}
+
+.account-info__value {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.account-info__value--green {
+  color: var(--accent-green);
+}
+
+/* Success */
+.account-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: var(--accent-green);
+  font-size: 0.8125rem;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  .account-grid {
+    grid-template-columns: 1fr;
+  }
+}

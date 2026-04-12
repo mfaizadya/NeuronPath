@@ -1,0 +1,142 @@
+.history-empty {
+  text-align: center;
+  padding: 60px 32px;
+}
+
+.history-empty__icon {
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.history-empty h3 {
+  margin-bottom: 8px;
+}
+
+.history-empty p {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+/* List */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.history-card {
+  padding: 24px;
+}
+
+.history-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.history-card__date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.history-card__badge {
+  font-size: 0.6875rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.history-card__body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.history-card__result {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+}
+
+.history-card__result-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.history-card__result-icon--blue { background: rgba(0,212,255,0.12); color: var(--accent-blue); }
+.history-card__result-icon--purple { background: rgba(124,58,237,0.12); color: var(--accent-purple); }
+
+.history-card__label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-bottom: 2px;
+}
+
+.history-card__value {
+  font-weight: 700;
+  font-size: 0.9375rem;
+}
+
+/* Scores */
+.history-card__scores {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.history-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.history-score__bar {
+  flex: 1;
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.history-score__fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+}
+
+.history-score__val {
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 30px;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .history-card__body {
+    grid-template-columns: 1fr;
+  }
+
+  .history-card__scores {
+    grid-template-columns: 1fr;
+  }
+}
