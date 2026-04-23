@@ -10,7 +10,7 @@ import {
   reauthenticateWithCredential,
 } from 'firebase/auth';
 import { auth } from '../config/firebase';
-import { createUserProfile, getUserProfile, updateUserProfile } from '../services/userService';
+import { createUserProfile, getUserProfile, updateUserProfile, upgradeUserToPremium } from '../services/userService';
 
 const AuthContext = createContext(null);
 
@@ -39,6 +39,7 @@ export function AuthProvider({ children }) {
             email: firebaseUser.email,
             username: profile?.username || firebaseUser.displayName || 'User',
             role: profile?.role || 'user',
+            isPremium: profile?.isPremium || false,
             photoURL: firebaseUser.photoURL,
             joinDate: profile?.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
           });
@@ -50,6 +51,7 @@ export function AuthProvider({ children }) {
             email: firebaseUser.email,
             username: firebaseUser.displayName || firebaseUser.email.split('@')[0],
             role: 'user',
+            isPremium: false,
             photoURL: firebaseUser.photoURL,
             joinDate: new Date().toISOString(),
           });
@@ -127,6 +129,15 @@ export function AuthProvider({ children }) {
     await updatePassword(auth.currentUser, newPassword);
   };
 
+  /**
+   * Simulasi upgrade akun ke premium
+   */
+  const upgradePremium = async () => {
+    if (!auth.currentUser) return;
+    await upgradeUserToPremium(auth.currentUser.uid);
+    setUser(prev => ({ ...prev, isPremium: true }));
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -136,6 +147,7 @@ export function AuthProvider({ children }) {
       logout,
       updateProfile,
       changePassword,
+      upgradePremium,
     }}>
       {children}
     </AuthContext.Provider>

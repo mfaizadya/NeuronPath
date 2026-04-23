@@ -2,20 +2,26 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getUserDashboardStats } from '../services/testResultService';
 import { createConsultationSession } from '../services/aiService';
-import { Bot, Send, Sparkles, Loader2 } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
+import { Bot, Send, Sparkles, Loader2, Lock, Crown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import './ConsultationPage.css';
 
 export default function ConsultationPage() {
   const { user } = useAuth();
+  const { setShowUpgradeModal } = useOutletContext() || {};
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(true);
   const [typing, setTyping] = useState(false);
   const [chatSession, setChatSession] = useState(null);
   const [error, setError] = useState('');
+  const [chatCount, setChatCount] = useState(0);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
+
+  const FREE_LIMIT = 3;
+  const isLimitReached = !user?.isPremium && chatCount >= FREE_LIMIT;
 
   // Auto scroll to bottom
   const scrollToBottom = () => {
@@ -35,6 +41,12 @@ export default function ConsultationPage() {
 
   // Initialize Chat Session with Context
   useEffect(() => {
+    // Load chat count from local storage
+    if (user?.uid) {
+      const savedCount = localStorage.getItem(`chatCount_${user.uid}`);
+      if (savedCount) setChatCount(parseInt(savedCount, 10));
+    }
+
     const initChat = async () => {
       try {
         // Fetch user context from Firestore
@@ -72,9 +84,17 @@ export default function ConsultationPage() {
 
   const handleSendMessage = async (e) => {
     e?.preventDefault();
-    if (!input.trim() || !chatSession || typing) return;
+    if (!input.trim() || !chatSession || typing || isLimitReached) return;
 
     const userMessage = input.trim();
+    
+    // Update chat count
+    const newCount = chatCount + 1;
+    setChatCount(newCount);
+    if (user?.uid) {
+      localStorage.setItem(`chatCount_${user.uid}`, newCount.toString());
+    }
+
     setInput('');
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'; // reset height
@@ -159,26 +179,37 @@ export default function ConsultationPage() {
               </div>
             </div>
           )}
+          {isLimitReached && (
+            <div className="premium-chat-banner">
+              <div className="premium-chat-banner__content">
+                <Lock size={20} style={{ color: '#f59e0b' }} />
+                <p>Batas <strong>{FREE_LIMIT} pesan gratis</strong> telah tercapai. Upgrade untuk terus ngobrol!</p>
+              </div>
+              <button className="btn-primary btn-small" onClick={() => setShowUpgradeModal?.(true)}>
+                <Crown size={14} /> Upgrade Premium
+              </button>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
 
         {/* Input Area */}
         <div className="chat-input-area">
-          <form className="chat-form" onSubmit={handleSendMessage}>
+          <form className="chat-form" onSubmit={handleSendMessage} style={{ opacity: isLimitReached ? 0.6 : 1 }}>
             <textarea
               ref={textareaRef}
               className="chat-textarea"
-              placeholder="Tanyakan sesuatu tentang cara belajar..."
+              placeholder={isLimitReached ? "Batas pesan tercapai..." : "Tanyakan sesuatu tentang cara belajar..."}
               value={input}
               onChange={handleInput}
               onKeyDown={handleKeyDown}
-              disabled={typing || !chatSession}
+              disabled={typing || !chatSession || isLimitReached}
               rows={1}
             />
             <button 
               type="submit" 
               className="chat-send-btn" 
-              disabled={!input.trim() || typing || !chatSession}
+              disabled={!input.trim() || typing || !chatSession || isLimitReached}
             >
               <Send size={18} style={{ marginLeft: '-2px' }} />
             </button>

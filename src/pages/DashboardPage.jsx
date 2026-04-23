@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getUserDashboardStats } from '../services/testResultService';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import {
   Brain, Eye, Headphones, Hand, TrendingUp,
-  ClipboardList, ArrowRight, Sparkles, BarChart3, Zap, Loader2
+  ClipboardList, ArrowRight, Sparkles, BarChart3, Zap, Loader2, Lock, Crown
 } from 'lucide-react';
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis,
@@ -22,6 +22,7 @@ const polaColors = {
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const { setShowUpgradeModal } = useOutletContext() || {};
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -120,7 +121,17 @@ export default function DashboardPage() {
       </div>
 
       {hasTests ? (
-        <div className="dash-grid">
+        <div className={`dash-grid ${!user?.isPremium ? 'premium-locked' : ''}`}>
+          {!user?.isPremium && (
+            <div className="premium-overlay" style={{ gridColumn: '1 / -1', zIndex: 10 }}>
+              <Lock size={48} className="premium-overlay__icon" />
+              <h3>Analisis Mendalam Dikunci</h3>
+              <p>Buka kunci untuk melihat grafik Radar, grafik Bar, dan Smart Insight dari perkembangan belajarmu.</p>
+              <button className="btn btn-primary" onClick={() => setShowUpgradeModal?.(true)} style={{ marginTop: 16 }}>
+                <Crown size={18} /> Upgrade ke Premium
+              </button>
+            </div>
+          )}
           {/* Gaya Belajar Chart */}
           <div className="dash-chart glass-card">
             <div className="dash-chart__header">
@@ -178,7 +189,17 @@ export default function DashboardPage() {
           </div>
 
           {/* Smart Insight */}
-          <div className="dash-insights glass-card">
+          <div className={`dash-insights glass-card ${!user?.isPremium ? 'premium-locked' : ''}`}>
+            {!user?.isPremium && (
+              <div className="premium-overlay">
+                <Lock size={32} className="premium-overlay__icon" />
+                <h3>Fitur Premium</h3>
+                <p>Upgrade untuk melihat Smart Insight dan Rekomendasi Belajar Personal.</p>
+                <button className="btn-primary" onClick={() => setShowUpgradeModal(true)}>
+                  <Crown size={16} /> Upgrade Sekarang
+                </button>
+              </div>
+            )}
             <div className="dash-chart__header">
               <h3><Zap size={18} /> Smart Insight</h3>
             </div>

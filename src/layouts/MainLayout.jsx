@@ -14,9 +14,11 @@ import {
   ChevronRight,
   MessageSquare,
   Sun,
-  Moon
+  Moon,
+  Crown
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import UpgradeModal from '../components/UpgradeModal';
 import './MainLayout.css';
 
 const navItems = [
@@ -32,6 +34,7 @@ export default function MainLayout() {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -86,7 +89,14 @@ export default function MainLayout() {
               {user?.username?.charAt(0)?.toUpperCase() || 'U'}
             </div>
             <div className="sidebar__user-info">
-              <span className="sidebar__username">{user?.username || 'User'}</span>
+              <span className="sidebar__username">
+                {user?.username || 'User'}
+                {user?.isPremium ? (
+                  <span className="badge badge--premium" title="Premium User"><Crown size={12} /> PRO</span>
+                ) : (
+                  <span className="badge badge--free" onClick={() => setShowUpgradeModal(true)}>FREE</span>
+                )}
+              </span>
               <span className="sidebar__email">{user?.email || ''}</span>
             </div>
           </div>
@@ -115,9 +125,11 @@ export default function MainLayout() {
         </header>
 
         <main className="main-page">
-          <Outlet />
+          <Outlet context={{ setShowUpgradeModal }} />
         </main>
       </div>
+
+      <UpgradeModal isOpen={showUpgradeModal} onClose={() => setShowUpgradeModal(false)} />
     </div>
   );
 }

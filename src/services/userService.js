@@ -11,6 +11,7 @@ export const createUserProfile = async (uid, userData) => {
     username: userData.username,
     email: userData.email,
     role: 'user',
+    isPremium: false,
     photoURL: null,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -34,6 +35,17 @@ export const updateUserProfile = async (uid, updates) => {
   const userRef = doc(db, 'users', uid);
   return await updateDoc(userRef, {
     ...updates,
+    updatedAt: serverTimestamp(),
+  });
+};
+
+/**
+ * Upgrade profil user ke premium
+ */
+export const upgradeUserToPremium = async (uid) => {
+  const userRef = doc(db, 'users', uid);
+  return await updateDoc(userRef, {
+    isPremium: true,
     updatedAt: serverTimestamp(),
   });
 };
