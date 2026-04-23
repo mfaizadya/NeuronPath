@@ -35,12 +35,12 @@ export default function LoginPage() {
   };
 
   const handleDemoLogin = async () => {
-    setEmail('demo@neuronpath.com');
-    setPassword('demo12345678');
+    setEmail('test@neuronpath.com');
+    setPassword('test12345678');
     setLoading(true);
     setError('');
     try {
-      await login('demo@neuronpath.com', 'demo12345678');
+      await login('test@neuronpath.com', 'test12345678');
       navigate('/dashboard');
     } catch (err) {
       setError(err.message);
@@ -128,7 +128,7 @@ export default function LoginPage() {
         </div>
 
         <p className="auth-demo-info">
-          Demo: <code>demo@neuronpath.com</code> / <code>demo12345678</code>
+          Demo: <code>test@neuronpath.com</code> / <code>test12345678</code>
         </p>
       </div>
     </div>
