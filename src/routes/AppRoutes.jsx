@@ -11,6 +11,7 @@ import TestPage from '../pages/TestPage';
 import ResultPage from '../pages/ResultPage';
 import HistoryPage from '../pages/HistoryPage';
 import AccountPage from '../pages/AccountPage';
+import ConsultationPage from '../pages/ConsultationPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 // Protected Route Component
@@ -53,6 +54,7 @@ export default function AppRoutes() {
         <Route path="/result" element={<ResultPage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/consultation" element={<ConsultationPage />} />
       </Route>
 
       {/* 404 */}

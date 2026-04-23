@@ -12,6 +12,7 @@ import {
   X,
   Zap,
   ChevronRight,
+  MessageSquare,
   Sun,
   Moon
 } from 'lucide-react';
@@ -22,6 +23,7 @@ const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/pretest', icon: Brain, label: 'Pretest' },
   { to: '/history', icon: History, label: 'Riwayat Tes' },
+  { to: '/consultation', icon: MessageSquare, label: 'Konsultasi AI' },
   { to: '/account', icon: UserCircle, label: 'Profil' },
 ];
 
