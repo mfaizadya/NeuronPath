@@ -1,21 +1,30 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { mockTestHistory } from '../data/mockResults';
-import { History, Eye, Brain, Calendar, ArrowRight, ClipboardList } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { getUserTestHistory } from '../services/testResultService';
+import { Eye, Brain, Calendar, ArrowRight, ClipboardList, Loader2 } from 'lucide-react';
 import './HistoryPage.css';
 
 export default function HistoryPage() {
+  const { user } = useAuth();
   const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('neuronpath_history') || '[]');
-    const combined = [...stored, ...mockTestHistory];
-    // Deduplicate by id
-    const unique = combined.filter(
-      (item, index, self) => index === self.findIndex(t => t.id === item.id)
-    );
-    setHistory(unique);
-  }, []);
+    const fetchHistory = async () => {
+      try {
+        if (user?.uid) {
+          const results = await getUserTestHistory(user.uid);
+          setHistory(results);
+        }
+      } catch (err) {
+        console.warn('Failed to fetch history from Firestore:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHistory();
+  }, [user]);
 
   const formatDate = (dateStr) => {
     return new Date(dateStr).toLocaleDateString('id-ID', {
@@ -26,6 +35,15 @@ export default function HistoryPage() {
       minute: '2-digit',
     });
   };
+
+  if (loading) {
+    return (
+      <div className="page-container" style={{ textAlign: 'center', paddingTop: '80px' }}>
+        <Loader2 size={32} className="spin" style={{ color: 'var(--accent-blue)' }} />
+        <p style={{ marginTop: 12, color: 'var(--text-secondary)' }}>Memuat riwayat tes...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="page-container">
@@ -54,7 +72,7 @@ export default function HistoryPage() {
               <div className="history-card__header">
                 <div className="history-card__date">
                   <Calendar size={16} />
-                  <span>{formatDate(item.date)}</span>
+                  <span>{formatDate(item.createdAt)}</span>
                 </div>
                 <span className="history-card__badge">
                   {item.answeredQuestions}/{item.totalQuestions} Soal
@@ -68,7 +86,7 @@ export default function HistoryPage() {
                   </div>
                   <div>
                     <span className="history-card__label">Gaya Belajar</span>
-                    <span className="history-card__value">{item.gayaBelajar.dominant}</span>
+                    <span className="history-card__value">{item.gayaBelajar?.dominant}</span>
                   </div>
                 </div>
 
@@ -78,13 +96,13 @@ export default function HistoryPage() {
                   </div>
                   <div>
                     <span className="history-card__label">Pola Belajar</span>
-                    <span className="history-card__value">{item.polaBelajar.dominant}</span>
+                    <span className="history-card__value">{item.polaBelajar?.dominant}</span>
                   </div>
                 </div>
               </div>
 
               <div className="history-card__scores">
-                {Object.entries(item.gayaBelajar.scores).map(([key, val]) => (
+                {item.gayaBelajar?.scores && Object.entries(item.gayaBelajar.scores).map(([key, val]) => (
                   <div key={key} className="history-score">
                     <span>{key}</span>
                     <div className="history-score__bar">

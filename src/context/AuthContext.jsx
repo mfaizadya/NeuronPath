@@ -1,100 +1,142 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  updateProfile as firebaseUpdateProfile,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+} from 'firebase/auth';
+import { auth } from '../config/firebase';
+import { createUserProfile, getUserProfile, updateUserProfile } from '../services/userService';
 
 const AuthContext = createContext(null);
-
-const DEMO_USER = {
-  id: 1,
-  username: 'Demo User',
-  email: 'demo@neuronpath.com',
-  role: 'user',
-  joinDate: '2026-01-15T00:00:00Z',
-  avatar: null,
-};
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Listen to Firebase Auth state changes
   useEffect(() => {
-    const stored = localStorage.getItem('neuronpath_user');
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored));
-      } catch {
-        localStorage.removeItem('neuronpath_user');
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          // Fetch full profile from Firestore
+          let profile = await getUserProfile(firebaseUser.uid);
+          if (!profile) {
+            // Fallback: create profile if it doesn't exist yet (edge case)
+            await createUserProfile(firebaseUser.uid, {
+              username: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+              email: firebaseUser.email,
+            });
+            profile = await getUserProfile(firebaseUser.uid);
+          }
+
+          setUser({
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            username: profile?.username || firebaseUser.displayName || 'User',
+            role: profile?.role || 'user',
+            photoURL: firebaseUser.photoURL,
+            joinDate: profile?.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+          });
+        } catch (err) {
+          console.error('Error fetching user profile:', err);
+          // Fallback to basic Firebase Auth data
+          setUser({
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            username: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+            role: 'user',
+            photoURL: firebaseUser.photoURL,
+            joinDate: new Date().toISOString(),
+          });
+        }
+      } else {
+        setUser(null);
       }
-    }
-    setLoading(false);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const login = (email, password) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // Check demo credentials
-        if (email === 'demo@neuronpath.com' && password === 'demo12345678') {
-          setUser(DEMO_USER);
-          localStorage.setItem('neuronpath_user', JSON.stringify(DEMO_USER));
-          resolve(DEMO_USER);
-          return;
-        }
+  /**
+   * Register user baru
+   */
+  const register = async (username, email, password) => {
+    const credential = await createUserWithEmailAndPassword(auth, email, password);
+    const firebaseUser = credential.user;
 
-        // Check registered users
-        const registeredUsers = JSON.parse(localStorage.getItem('neuronpath_registered') || '[]');
-        const found = registeredUsers.find(u => u.email === email && u.password === password);
-        if (found) {
-          const userData = { ...found };
-          delete userData.password;
-          setUser(userData);
-          localStorage.setItem('neuronpath_user', JSON.stringify(userData));
-          resolve(userData);
-          return;
-        }
+    // Set display name di Firebase Auth
+    await firebaseUpdateProfile(firebaseUser, { displayName: username });
 
-        reject(new Error('Email atau password salah'));
-      }, 800);
-    });
+    // Buat dokumen profil di Firestore
+    await createUserProfile(firebaseUser.uid, { username, email });
+
+    return firebaseUser;
   };
 
-  const register = (username, email, password) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const registeredUsers = JSON.parse(localStorage.getItem('neuronpath_registered') || '[]');
-        
-        if (registeredUsers.find(u => u.email === email)) {
-          reject(new Error('Email sudah terdaftar'));
-          return;
-        }
-
-        const newUser = {
-          id: Date.now(),
-          username,
-          email,
-          password,
-          role: 'user',
-          joinDate: new Date().toISOString(),
-          avatar: null,
-        };
-
-        registeredUsers.push(newUser);
-        localStorage.setItem('neuronpath_registered', JSON.stringify(registeredUsers));
-        resolve(newUser);
-      }, 800);
-    });
+  /**
+   * Login
+   */
+  const login = async (email, password) => {
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    return credential.user;
   };
 
-  const logout = () => {
+  /**
+   * Logout
+   */
+  const logout = async () => {
+    await signOut(auth);
     setUser(null);
-    localStorage.removeItem('neuronpath_user');
   };
 
-  const updateProfile = (updates) => {
-    const updated = { ...user, ...updates };
-    setUser(updated);
-    localStorage.setItem('neuronpath_user', JSON.stringify(updated));
+  /**
+   * Update profil (username)
+   */
+  const updateProfile = async (updates) => {
+    if (!auth.currentUser) return;
+
+    // Update Firebase Auth displayName
+    if (updates.username) {
+      await firebaseUpdateProfile(auth.currentUser, { displayName: updates.username });
+    }
+
+    // Update Firestore
+    await updateUserProfile(auth.currentUser.uid, updates);
+
+    // Update local state
+    setUser(prev => ({ ...prev, ...updates }));
+  };
+
+  /**
+   * Ganti password
+   */
+  const changePassword = async (currentPassword, newPassword) => {
+    if (!auth.currentUser) throw new Error('Tidak ada user yang login');
+
+    // Re-authenticate dulu (Firebase requirement)
+    const credential = EmailAuthProvider.credential(auth.currentUser.email, currentPassword);
+    await reauthenticateWithCredential(auth.currentUser, credential);
+
+    // Update password
+    await updatePassword(auth.currentUser, newPassword);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateProfile }}>
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      login,
+      register,
+      logout,
+      updateProfile,
+      changePassword,
+    }}>
       {children}
     </AuthContext.Provider>
   );

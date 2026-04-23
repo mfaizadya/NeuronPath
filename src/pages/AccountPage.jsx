@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { getFirebaseErrorMessage } from '../utils/firebaseErrors';
 import { User, Mail, Calendar, Shield, Lock, Save, Loader2, CheckCircle2 } from 'lucide-react';
 import './AccountPage.css';
 
 export default function AccountPage() {
-  const { user, updateProfile } = useAuth();
+  const { user, updateProfile, changePassword } = useAuth();
   const [username, setUsername] = useState(user?.username || '');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [profileError, setProfileError] = useState('');
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -24,18 +26,22 @@ export default function AccountPage() {
       })
     : '-';
 
-  const handleSaveProfile = (e) => {
+  const handleSaveProfile = async (e) => {
     e.preventDefault();
+    setProfileError('');
     setSaving(true);
-    setTimeout(() => {
-      updateProfile({ username });
-      setSaving(false);
+    try {
+      await updateProfile({ username });
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
-    }, 800);
+    } catch (err) {
+      setProfileError(getFirebaseErrorMessage(err));
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleChangePassword = (e) => {
+  const handleChangePassword = async (e) => {
     e.preventDefault();
     setPasswordError('');
 
@@ -55,14 +61,18 @@ export default function AccountPage() {
     }
 
     setPasswordSaving(true);
-    setTimeout(() => {
-      setPasswordSaving(false);
+    try {
+      await changePassword(currentPassword, newPassword);
       setPasswordSaved(true);
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setTimeout(() => setPasswordSaved(false), 3000);
-    }, 800);
+    } catch (err) {
+      setPasswordError(getFirebaseErrorMessage(err));
+    } finally {
+      setPasswordSaving(false);
+    }
   };
 
   return (
@@ -88,6 +98,8 @@ export default function AccountPage() {
               {user?.username?.charAt(0)?.toUpperCase() || 'U'}
             </div>
           </div>
+
+          {profileError && <div className="auth-error">{profileError}</div>}
 
           <form onSubmit={handleSaveProfile} className="account-form">
             <div className="form-group">

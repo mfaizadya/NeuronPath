@@ -1,9 +1,10 @@
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { dashboardStats, mockTestHistory } from '../data/mockResults';
+import { getUserDashboardStats } from '../services/testResultService';
 import { Link } from 'react-router-dom';
 import {
   Brain, Eye, Headphones, Hand, TrendingUp,
-  ClipboardList, ArrowRight, Sparkles, BarChart3, Zap
+  ClipboardList, ArrowRight, Sparkles, BarChart3, Zap, Loader2
 } from 'lucide-react';
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis,
@@ -12,23 +13,60 @@ import {
 } from 'recharts';
 import './DashboardPage.css';
 
-const gayaData = [
-  { subject: 'Visual', score: 78 },
-  { subject: 'Auditori', score: 55 },
-  { subject: 'Kinestetik', score: 42 },
-];
-
-const polaData = [
-  { name: 'Consistent', value: 72, color: '#00d4ff' },
-  { name: 'Fast', value: 60, color: '#f59e0b' },
-  { name: 'Reflective', value: 85, color: '#7c3aed' },
-  { name: 'Balanced', value: 68, color: '#10b981' },
-];
+const polaColors = {
+  consistent: '#00d4ff',
+  fast: '#f59e0b',
+  reflective: '#7c3aed',
+  balanced: '#10b981',
+};
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const stats = dashboardStats;
-  const hasTests = mockTestHistory.length > 0;
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        if (user?.uid) {
+          const dashStats = await getUserDashboardStats(user.uid);
+          setStats(dashStats);
+        }
+      } catch (err) {
+        console.warn('Failed to fetch dashboard stats:', err);
+        setStats({ totalTests: 0, gayaDominant: '-', polaDominant: '-', averageCompletion: 0, history: [] });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, [user]);
+
+  if (loading) {
+    return (
+      <div className="page-container" style={{ textAlign: 'center', paddingTop: '80px' }}>
+        <Loader2 size={32} className="spin" style={{ color: 'var(--accent-blue)' }} />
+        <p style={{ marginTop: 12, color: 'var(--text-secondary)' }}>Memuat dashboard...</p>
+      </div>
+    );
+  }
+
+  const hasTests = stats && stats.totalTests > 0;
+
+  // Build chart data from latest test result
+  const latestResult = hasTests ? stats.history[0] : null;
+
+  const gayaData = latestResult ? [
+    { subject: 'Visual', score: latestResult.gayaBelajar?.scores?.visual || 0 },
+    { subject: 'Auditori', score: latestResult.gayaBelajar?.scores?.auditori || 0 },
+    { subject: 'Kinestetik', score: latestResult.gayaBelajar?.scores?.kinestetik || 0 },
+  ] : [];
+
+  const polaData = latestResult ? Object.entries(latestResult.polaBelajar?.scores || {}).map(([key, value]) => ({
+    name: key.charAt(0).toUpperCase() + key.slice(1),
+    value: Math.min(value, 100),
+    color: polaColors[key] || '#94a3b8',
+  })) : [];
 
   return (
     <div className="page-container">
@@ -48,7 +86,7 @@ export default function DashboardPage() {
             <ClipboardList size={22} />
           </div>
           <div className="stat-card__info">
-            <span className="stat-card__value">{stats.totalTests}</span>
+            <span className="stat-card__value">{stats?.totalTests || 0}</span>
             <span className="stat-card__label">Total Tes</span>
           </div>
         </div>
@@ -57,7 +95,7 @@ export default function DashboardPage() {
             <Eye size={22} />
           </div>
           <div className="stat-card__info">
-            <span className="stat-card__value">{stats.gayaDominant}</span>
+            <span className="stat-card__value">{stats?.gayaDominant || '-'}</span>
             <span className="stat-card__label">Gaya Belajar</span>
           </div>
         </div>
@@ -66,7 +104,7 @@ export default function DashboardPage() {
             <Brain size={22} />
           </div>
           <div className="stat-card__info">
-            <span className="stat-card__value">{stats.polaDominant}</span>
+            <span className="stat-card__value">{stats?.polaDominant || '-'}</span>
             <span className="stat-card__label">Pola Belajar</span>
           </div>
         </div>
@@ -75,7 +113,7 @@ export default function DashboardPage() {
             <TrendingUp size={22} />
           </div>
           <div className="stat-card__info">
-            <span className="stat-card__value">{stats.averageCompletion}%</span>
+            <span className="stat-card__value">{stats?.averageCompletion || 0}%</span>
             <span className="stat-card__label">Rata-rata</span>
           </div>
         </div>
@@ -139,7 +177,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* AI Insight */}
+          {/* Smart Insight */}
           <div className="dash-insights glass-card">
             <div className="dash-chart__header">
               <h3><Zap size={18} /> Smart Insight</h3>
@@ -150,8 +188,14 @@ export default function DashboardPage() {
                   <Eye size={18} />
                 </div>
                 <div className="insight-item__content">
-                  <h4>Gaya Belajar: Visual</h4>
-                  <p>Anda belajar paling efektif melalui diagram, grafik, video, dan visualisasi data. Gunakan mind-map dan infografis.</p>
+                  <h4>Gaya Belajar: {stats.gayaDominant}</h4>
+                  <p>
+                    {stats.gayaDominant === 'Visual'
+                      ? 'Anda belajar paling efektif melalui diagram, grafik, video, dan visualisasi data. Gunakan mind-map dan infografis.'
+                      : stats.gayaDominant === 'Auditori'
+                      ? 'Anda belajar paling efektif melalui diskusi, mendengarkan penjelasan, dan podcast.'
+                      : 'Anda belajar paling efektif melalui praktik langsung, eksperimen, dan simulasi.'}
+                  </p>
                 </div>
               </div>
               <div className="insight-item">
@@ -159,8 +203,14 @@ export default function DashboardPage() {
                   <Brain size={18} />
                 </div>
                 <div className="insight-item__content">
-                  <h4>Pola Belajar: Reflective</h4>
-                  <p>Anda suka merefleksikan dan mengulang materi untuk pemahaman yang lebih dalam. Catat poin kunci dan review secara berkala.</p>
+                  <h4>Pola Belajar: {stats.polaDominant}</h4>
+                  <p>
+                    {stats.polaDominant === 'Reflective'
+                      ? 'Anda suka merefleksikan dan mengulang materi untuk pemahaman yang lebih dalam. Catat poin kunci dan review secara berkala.'
+                      : stats.polaDominant === 'Consistent'
+                      ? 'Anda memiliki rutinitas belajar yang teratur dan konsisten.'
+                      : 'Anda memiliki keseimbangan yang baik antara berbagai metode belajar.'}
+                  </p>
                 </div>
               </div>
               <div className="insight-item">
@@ -169,7 +219,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="insight-item__content">
                   <h4>Rekomendasi</h4>
-                  <p>Kombinasikan mind-map visual dengan sesi refleksi 10 menit setelah belajar untuk hasil optimal.</p>
+                  <p>Kombinasikan strategi belajar berdasarkan gaya dan pola Anda untuk hasil optimal.</p>
                 </div>
               </div>
             </div>

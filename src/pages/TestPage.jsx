@@ -1,16 +1,58 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllQuestions, likertOptions } from '../data/pretestQuestions';
+import { useAuth } from '../context/AuthContext';
+import { getActiveQuestions } from '../services/questionService';
+import { saveTestResult } from '../services/testResultService';
 import { generateResult } from '../data/mockResults';
+import { likertOptions } from '../data/pretestQuestions';
 import { ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react';
 import './TestPage.css';
 
 export default function TestPage() {
   const navigate = useNavigate();
-  const questions = getAllQuestions();
+  const { user } = useAuth();
+  const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [loadingQuestions, setLoadingQuestions] = useState(true);
+
+  // Fetch questions from Firestore on mount
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const firestoreQuestions = await getActiveQuestions();
+        if (firestoreQuestions.length > 0) {
+          // Map Firestore format to local format
+          setQuestions(firestoreQuestions.map(q => ({
+            id: q.id,
+            question: q.questionText,
+            category: q.category,
+          })));
+        } else {
+          // Fallback to hardcoded questions if Firestore is empty
+          const { getAllQuestions } = await import('../data/pretestQuestions');
+          setQuestions(getAllQuestions());
+        }
+      } catch (err) {
+        console.warn('Firestore unavailable, using fallback questions:', err);
+        const { getAllQuestions } = await import('../data/pretestQuestions');
+        setQuestions(getAllQuestions());
+      } finally {
+        setLoadingQuestions(false);
+      }
+    };
+    fetchQuestions();
+  }, []);
+
+  if (loadingQuestions || questions.length === 0) {
+    return (
+      <div className="test-page" style={{ textAlign: 'center', paddingTop: '80px' }}>
+        <Loader2 size={32} className="spin" style={{ color: 'var(--accent-blue)' }} />
+        <p style={{ marginTop: 12, color: 'var(--text-secondary)' }}>Memuat pertanyaan...</p>
+      </div>
+    );
+  }
 
   const currentQuestion = questions[currentIndex];
   const progress = ((Object.keys(answers).length) / questions.length) * 100;
@@ -18,22 +60,38 @@ export default function TestPage() {
 
   const handleAnswer = (value) => {
     setAnswers({ ...answers, [currentQuestion.id]: value });
-    // Auto-advance after short delay
     if (currentIndex < questions.length - 1) {
       setTimeout(() => setCurrentIndex(currentIndex + 1), 300);
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setSubmitting(true);
-    setTimeout(() => {
+    try {
       const result = generateResult(answers);
-      // Store result
-      const history = JSON.parse(localStorage.getItem('neuronpath_history') || '[]');
-      history.unshift(result);
-      localStorage.setItem('neuronpath_history', JSON.stringify(history));
+
+      // Save to Firestore
+      if (user?.uid) {
+        try {
+          const docRef = await saveTestResult(user.uid, {
+            answers,
+            gayaBelajar: result.gayaBelajar,
+            polaBelajar: result.polaBelajar,
+            insights: result.insights,
+            totalQuestions: result.totalQuestions,
+            answeredQuestions: result.answeredQuestions,
+          });
+          result.id = docRef.id;
+        } catch (err) {
+          console.warn('Failed to save to Firestore, continuing with local result:', err);
+        }
+      }
+
       navigate('/result', { state: { result } });
-    }, 1500);
+    } catch (err) {
+      console.error('Submit error:', err);
+      setSubmitting(false);
+    }
   };
 
   return (

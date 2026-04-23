@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { getFirebaseErrorMessage } from '../utils/firebaseErrors';
 import { Zap, User, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
 import './AuthPages.css';
 
@@ -39,7 +40,7 @@ export default function RegisterPage() {
       await register(username, email, password);
       navigate('/login', { state: { registered: true } });
     } catch (err) {
-      setError(err.message);
+      setError(getFirebaseErrorMessage(err));
     } finally {
       setLoading(false);
     }
