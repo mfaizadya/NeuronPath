@@ -53,6 +53,7 @@ export function ChatProvider({ children }) {
   const [userStats, setUserStats]     = useState(null);
   const [initialized, setInitialized] = useState(false);
   const [initError, setInitError]     = useState('');
+  const [hasPretest, setHasPretest]   = useState(false);
 
   // Ref to avoid stale closure in buildAiSession
   const userStatsRef = useRef(null);
@@ -88,6 +89,16 @@ export function ChatProvider({ children }) {
     if (!user?.uid) return;
 
     const init = async () => {
+      // Reset semua state dari user sebelumnya sebelum mulai
+      setSessions([]);
+      setActiveId(null);
+      setChatSession(null);
+      setChatCount(0);
+      setUserStats(null);
+      setInitialized(false);
+      setInitError('');
+      setHasPretest(false);
+
       try {
         const count = await getChatUsage(user.uid);
         setChatCount(count);
@@ -97,30 +108,39 @@ export function ChatProvider({ children }) {
       try {
         stats = await getUserDashboardStats(user.uid);
         setUserStats(stats);
+        setHasPretest((stats?.totalTests ?? 0) > 0);
       } catch { /* ignore */ }
 
-      const greeting = `Halo ${user?.username}! 👋 Saya Neuron, AI konsultan belajarmu.\n\nSaya lihat gaya belajarmu cenderung **${stats?.gayaDominant || 'belum diketahui'}** dan polamu **${stats?.polaDominant || 'belum diketahui'}**. Ada materi spesifik yang ingin kamu pelajari hari ini, atau butuh tips belajar yang cocok buat kamu?`;
+      const hasPretest = (stats?.totalTests ?? 0) > 0;
+
+      const greeting = hasPretest
+        ? `Halo ${user?.username}! 👋 Saya Neuron, AI konsultan belajarmu.\n\nSaya lihat gaya belajarmu cenderung **${stats.gayaDominant}** dan polamu **${stats.polaDominant}**. Ada materi spesifik yang ingin kamu pelajari hari ini, atau butuh tips belajar yang cocok buat kamu?`
+        : `Halo ${user?.username}! 👋 Saya Neuron, AI konsultan belajarmu.\n\nKamu belum mengerjakan pretest, jadi saya belum bisa melihat profil belajarmu. Yuk mulai **[Pretest](/pretest)** dulu untuk mendapatkan rekomendasi belajar yang personal! 🎯\n\nAtau kalau kamu punya pertanyaan seputar cara belajar, saya siap bantu!`;
 
       try {
         const saved = isPremium ? loadSessions(user.uid) : [];
         if (saved.length > 0) {
-          // Patch greeting message di semua sesi yang masih pakai teks strip
+          // Patch greeting di semua sesi yang sudah tidak relevan dengan kondisi user saat ini
           const patched = saved.map(s => {
-            if (
-              s.messages?.length > 0 &&
-              s.messages[0].role === 'ai' &&
-              (s.messages[0].content.includes('cenderung **-**') ||
-               s.messages[0].content.includes('polamu **-**') ||
-               s.messages[0].content.includes('belum diketahui'))
-            ) {
-              const updatedGreeting = `Halo ${user?.username}! 👋 Saya Neuron, AI konsultan belajarmu.\n\nSaya lihat gaya belajarmu cenderung **${stats?.gayaDominant || 'belum diketahui'}** dan polamu **${stats?.polaDominant || 'belum diketahui'}**. Ada materi spesifik yang ingin kamu pelajari hari ini, atau butuh tips belajar yang cocok buat kamu?`;
-              return {
-                ...s,
-                messages: [
-                  { role: 'ai', content: updatedGreeting },
-                  ...s.messages.slice(1),
-                ],
-              };
+            if (s.messages?.length > 0 && s.messages[0].role === 'ai') {
+              const firstMsg = s.messages[0].content;
+              const needsPatch =
+                firstMsg.includes('cenderung **-**') ||
+                firstMsg.includes('polamu **-**') ||
+                firstMsg.includes('belum diketahui') ||
+                firstMsg.includes('belum mengerjakan pretest') ||
+                // greeting dari sesi lama yang belum pretest tapi sekarang sudah
+                (!hasPretest === false && firstMsg.includes('belum bisa melihat profil'));
+
+              if (needsPatch) {
+                return {
+                  ...s,
+                  messages: [
+                    { role: 'ai', content: greeting },
+                    ...s.messages.slice(1),
+                  ],
+                };
+              }
             }
             return s;
           });
@@ -226,7 +246,7 @@ export function ChatProvider({ children }) {
     <ChatContext.Provider value={{
       sessions, activeId, activeSession, chatSession,
       chatCount, userStats, initialized, initError,
-      isLimitReached, isPremium,
+      isLimitReached, isPremium, hasPretest,
       selectSession, newChat, deleteSession, sendMessage,
       setSessions, setActiveId,
     }}>

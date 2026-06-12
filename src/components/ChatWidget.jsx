@@ -15,7 +15,7 @@ export default function ChatWidget({ onUpgrade }) {
   const location  = useLocation();
   const {
     activeSession, initialized, initError,
-    isLimitReached, sendMessage, userStats,
+    isLimitReached, sendMessage, hasPretest,
   } = useChat();
 
   const [open, setOpen]       = useState(false);
@@ -32,13 +32,13 @@ export default function ChatWidget({ onUpgrade }) {
     if (
       !hasOpenedRef.current &&
       initialized &&
-      userStats?.totalTests > 0 &&
+      hasPretest &&
       window.innerWidth > 768
     ) {
       hasOpenedRef.current = true;
       setOpen(true);
     }
-  }, [initialized, userStats]);
+  }, [initialized, hasPretest]);
 
   // Auto scroll — always called, no conditional hook
   useEffect(() => {
