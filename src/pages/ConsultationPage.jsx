@@ -104,8 +104,8 @@ export default function ConsultationPage() {
     setTyping(true);
 
     try {
-      const response = await chatSession.sendMessage({ message: userMessage });
-      const aiResponseText = response.text || 'Maaf, saya tidak bisa memproses permintaan Anda saat ini.';
+      const response = await chatSession.sendMessage(userMessage);
+      const aiResponseText = response || 'Maaf, saya tidak bisa memproses permintaan Anda saat ini.';
       
       setMessages(prev => [...prev, { role: 'ai', content: aiResponseText }]);
 
@@ -152,7 +152,7 @@ export default function ConsultationPage() {
           </div>
           <div className="chat-header__title">
             <h2>Konsultasi AI <Sparkles size={14} style={{ color: '#f59e0b', display: 'inline' }} /></h2>
-            <p>Powered by Google Gemini</p>
+            <p>Powered by OpenRouter Auto</p>
           </div>
         </div>
 
