@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useChat, formatSessionDate } from '../context/ChatContext';
 import { useOutletContext } from 'react-router-dom';
@@ -26,7 +26,7 @@ export default function ConsultationPage() {
   const messagesEndRef = useRef(null);
   const textareaRef    = useRef(null);
 
-  const messages = activeSession?.messages || [];
+  const messages = useMemo(() => activeSession?.messages || [], [activeSession]);
 
   // Auto scroll
   useEffect(() => {

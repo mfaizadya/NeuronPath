@@ -1,7 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useChat } from '../context/ChatContext';
-import { useAuth } from '../context/AuthContext';
 import {
   Bot, Send, X, Maximize2, Loader2,
   Lock, Crown, Sparkles
@@ -10,7 +9,6 @@ import ReactMarkdown from 'react-markdown';
 import './ChatWidget.css';
 
 export default function ChatWidget({ onUpgrade }) {
-  const { user } = useAuth();
   const navigate  = useNavigate();
   const location  = useLocation();
   const {
@@ -24,7 +22,7 @@ export default function ChatWidget({ onUpgrade }) {
 
   const messagesEndRef = useRef(null);
   const textareaRef    = useRef(null);
-  const messages = activeSession?.messages || [];
+  const messages = useMemo(() => activeSession?.messages || [], [activeSession]);
 
   // Buka otomatis di desktop jika user sudah punya riwayat pretest
   const hasOpenedRef = useRef(false);
