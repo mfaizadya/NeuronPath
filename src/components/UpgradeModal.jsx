@@ -1,11 +1,10 @@
-import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+
 import { useNavigate } from 'react-router-dom';
 import { X, Crown, CheckCircle2, Sparkles } from 'lucide-react';
 import './UpgradeModal.css';
 
 export default function UpgradeModal({ isOpen, onClose }) {
-  const { user } = useAuth();
+
   const navigate = useNavigate();
 
   if (!isOpen) return null;

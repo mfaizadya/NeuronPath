@@ -140,7 +140,7 @@ export default function PaymentPage() {
       await upgradePremium();
       setSuccess(true);
       setTimeout(() => navigate('/dashboard'), 2500);
-    } catch (err) {
+    } catch {
       setActivationProcessing(false);
       setErrorModal('Gagal mengaktifkan kode. Silakan coba lagi.');
     }
