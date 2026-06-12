@@ -1,17 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Zap, Brain, BarChart3, Sparkles, ArrowRight, Shield, Clock, Users } from 'lucide-react';
+import { Zap, Brain, BarChart3, Sparkles, ArrowRight, Shield, Clock, Users, Globe2 } from 'lucide-react';
 import './LandingPage.css';
 
 export default function LandingPage() {
   return (
     <div className="landing">
-      {/* Animated background */}
-      <div className="landing__bg">
-        <div className="landing__orb landing__orb--1" />
-        <div className="landing__orb landing__orb--2" />
-        <div className="landing__orb landing__orb--3" />
-      </div>
-
       {/* Navbar */}
       <nav className="landing__nav">
         <div className="landing__nav-inner">
@@ -22,50 +15,91 @@ export default function LandingPage() {
             <span className="landing__logo-text">NeuronPath</span>
           </div>
           <div className="landing__nav-actions">
+            <span className="landing__language">
+              <Globe2 size={18} />
+              ID
+            </span>
             <Link to="/login" className="btn btn-ghost">Masuk</Link>
-            <Link to="/register" className="btn btn-primary">Mulai Gratis</Link>
+            <Link to="/register" className="btn btn-primary">Mulai Tes</Link>
           </div>
         </div>
       </nav>
 
       {/* Hero */}
       <section className="hero">
-        <div className="hero__content animate-fade-in-up">
-          <div className="hero__badge">
-            <Sparkles size={14} />
-            <span>Platform Asesmen Cerdas</span>
-          </div>
-          <h1 className="hero__title">
-            Temukan <span className="gradient-text">Neural Network</span> Gaya Belajarmu
-          </h1>
-          <p className="hero__desc">
-            NeuronPath menganalisis Gaya Belajar (Visual, Auditori, Kinestetik) dan 
-            Pola Belajar (Consistent, Fast, Reflective, Balanced) Anda secara instan 
-            berdasarkan perhitungan heuristik terstruktur. Tanpa perlu histori data.
-          </p>
-          <div className="hero__actions">
-            <Link to="/register" className="btn btn-primary btn-lg">
-              Mulai Analisis
-              <ArrowRight size={18} />
-            </Link>
-            <Link to="/login" className="btn btn-secondary btn-lg">
-              Sudah Punya Akun
-            </Link>
-          </div>
-          <div className="hero__stats">
-            <div className="hero__stat">
-              <span className="hero__stat-number">15</span>
-              <span className="hero__stat-label">Pertanyaan</span>
+        <div className="hero__card animate-fade-in-up">
+          <div className="hero__content">
+            <h1 className="hero__title">
+              Temukan <span>siapa dirimu</span> lewat gaya belajar
+            </h1>
+            <p className="hero__desc">
+              Dengan tes ini, kamu akan mengetahui gaya belajar dan pola belajar
+              yang paling cocok untuk memahami materi dengan lebih percaya diri.
+            </p>
+            <div className="hero__actions">
+              <Link to="/register" className="btn btn-primary btn-lg">
+                Mulai Tes Belajar
+                <ArrowRight size={18} />
+              </Link>
             </div>
-            <div className="hero__stat-divider" />
-            <div className="hero__stat">
-              <span className="hero__stat-number">&lt;5</span>
-              <span className="hero__stat-label">Menit</span>
-            </div>
-            <div className="hero__stat-divider" />
-            <div className="hero__stat">
-              <span className="hero__stat-number">Sistem</span>
-              <span className="hero__stat-label">Analisis</span>
+            <p className="hero__note">
+              Gratis untuk memulai. Hasil personal bisa dilihat setelah tes selesai.
+            </p>
+          </div>
+
+          <div className="hero__visual" aria-hidden="true">
+            <div className="phone">
+              <div className="phone__speaker" />
+              <div className="phone__screen">
+                <div className="phone__status">
+                  <span>9:41</span>
+                  <span>78%</span>
+                </div>
+                <div className="phone__brand">
+                  <div className="phone__brand-icon">
+                    <Zap size={17} />
+                  </div>
+                  <div>
+                    <strong>NeuronPath</strong>
+                    <span>Analisis belajar</span>
+                  </div>
+                </div>
+                <div className="phone__progress">
+                  <span>48%</span>
+                  <span>Langkah 6 dari 12</span>
+                </div>
+                <div className="phone__bar">
+                  <span />
+                </div>
+                <h3>Pilih jawaban yang paling menggambarkan dirimu.</h3>
+                <div className="phone__scale">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </div>
+                <div className="phone__question">
+                  <p>Saya lebih mudah paham saat melihat diagram atau contoh visual.</p>
+                  <div className="phone__scale phone__scale--small">
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                </div>
+                <div className="phone__question">
+                  <p>Saya suka mengulang materi dengan ritme yang konsisten.</p>
+                  <div className="phone__scale phone__scale--small">
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -87,7 +121,7 @@ export default function LandingPage() {
               </div>
               <h3 className="feature-card__title">Pretest Cerdas</h3>
               <p className="feature-card__desc">
-                Jawab 15 pertanyaan yang dirancang khusus untuk menganalisis 
+                Jawab 15 pertanyaan yang dirancang khusus untuk menganalisis
                 preferensi dan kebiasaan belajar Anda.
               </p>
               <div className="feature-card__step">01</div>
@@ -98,7 +132,7 @@ export default function LandingPage() {
               </div>
               <h3 className="feature-card__title">Analisis Sistem</h3>
               <p className="feature-card__desc">
-                Sistem kami menganalisis jawaban Anda untuk memetakan gaya 
+                Sistem kami menganalisis jawaban Anda untuk memetakan gaya
                 dan pola belajar secara terstruktur dan akurat.
               </p>
               <div className="feature-card__step">02</div>
@@ -109,7 +143,7 @@ export default function LandingPage() {
               </div>
               <h3 className="feature-card__title">Insight Personal</h3>
               <p className="feature-card__desc">
-                Dapatkan rekomendasi personalisasi dan strategi belajar 
+                Dapatkan rekomendasi personalisasi dan strategi belajar
                 yang sesuai dengan profil unik Anda.
               </p>
               <div className="feature-card__step">03</div>
@@ -149,7 +183,7 @@ export default function LandingPage() {
             Bergabung sekarang dan temukan gaya belajar yang paling efektif untukmu.
           </p>
           <Link to="/register" className="btn btn-primary btn-lg">
-            Daftar Sekarang — Gratis
+            Daftar Sekarang - Gratis
             <ArrowRight size={18} />
           </Link>
         </div>
@@ -162,7 +196,7 @@ export default function LandingPage() {
             <Zap size={18} />
             <span>NeuronPath</span>
           </div>
-          <p>© 2026 NeuronPath. Software Engineering for Startup.</p>
+          <p>Copyright 2026 NeuronPath. Software Engineering for Startup.</p>
         </div>
       </footer>
     </div>
