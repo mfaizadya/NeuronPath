@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import PropTypes from 'prop-types';
 import {
   Crown, CheckCircle2, Loader2, ChevronRight,
   ShieldCheck, ArrowLeft, Smartphone, Building2,
@@ -79,6 +80,12 @@ function ErrorModal({ message, onClose, onRetry }) {
     </div>
   );
 }
+
+ErrorModal.propTypes = {
+  message: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onRetry: PropTypes.func.isRequired,
+};
 
 export default function PaymentPage() {
   const navigate = useNavigate();
@@ -389,22 +396,22 @@ export default function PaymentPage() {
                   <h4>Data Kartu</h4>
                   <div className="payment-card-form">
                     <div className="form-group">
-                      <label className="form-label">Nomor Kartu</label>
-                      <input className="form-input" placeholder="1234 5678 9012 3456" maxLength={19} />
+                      <label className="form-label" htmlFor="cc-number">Nomor Kartu</label>
+                      <input id="cc-number" className="form-input" placeholder="1234 5678 9012 3456" maxLength={19} />
                     </div>
                     <div className="payment-card-form__row">
                       <div className="form-group">
-                        <label className="form-label">Exp. Date</label>
-                        <input className="form-input" placeholder="MM/YY" maxLength={5} />
+                        <label className="form-label" htmlFor="cc-exp">Exp. Date</label>
+                        <input id="cc-exp" className="form-input" placeholder="MM/YY" maxLength={5} />
                       </div>
                       <div className="form-group">
-                        <label className="form-label">CVV</label>
-                        <input className="form-input" placeholder="•••" maxLength={3} type="password" />
+                        <label className="form-label" htmlFor="cc-cvv">CVV</label>
+                        <input id="cc-cvv" className="form-input" placeholder="•••" maxLength={3} type="password" />
                       </div>
                     </div>
                     <div className="form-group">
-                      <label className="form-label">Nama di Kartu</label>
-                      <input className="form-input" placeholder="NAMA LENGKAP" />
+                      <label className="form-label" htmlFor="cc-name">Nama di Kartu</label>
+                      <input id="cc-name" className="form-input" placeholder="NAMA LENGKAP" />
                     </div>
                   </div>
                 </div>

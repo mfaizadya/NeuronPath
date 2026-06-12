@@ -1,5 +1,6 @@
 
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { X, Crown, CheckCircle2, Sparkles } from 'lucide-react';
 import './UpgradeModal.css';
 
@@ -60,3 +61,8 @@ export default function UpgradeModal({ isOpen, onClose }) {
     </div>
   );
 }
+
+UpgradeModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};

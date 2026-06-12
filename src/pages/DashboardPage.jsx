@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getUserDashboardStats } from '../services/testResultService';
 import { Link, useOutletContext } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   Brain, Eye, Headphones, Hand, TrendingUp,
   ClipboardList, ArrowRight, Sparkles, BarChart3, Zap, Loader2, Lock, Crown
@@ -9,7 +10,7 @@ import {
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis,
   PolarRadiusAxis, ResponsiveContainer, BarChart, Bar,
-  XAxis, YAxis, CartesianGrid, Tooltip, Cell
+  XAxis, YAxis, CartesianGrid, Tooltip
 } from 'recharts';
 import './DashboardPage.css';
 
@@ -19,6 +20,187 @@ const polaColors = {
   reflective: 'var(--accent-purple)',
   balanced: '#50d6be',
 };
+
+// ─── Sub-components to reduce cognitive complexity ─────────────
+
+function StatCards({ stats }) {
+  return (
+    <div className="dash-stats">
+      <div className="stat-card glass-card">
+        <div className="stat-card__icon stat-card__icon--blue">
+          <ClipboardList size={22} />
+        </div>
+        <div className="stat-card__info">
+          <span className="stat-card__value">{stats?.totalTests || 0}</span>
+          <span className="stat-card__label">Total Tes</span>
+        </div>
+      </div>
+      <div className="stat-card glass-card">
+        <div className="stat-card__icon stat-card__icon--purple">
+          <Eye size={22} />
+        </div>
+        <div className="stat-card__info">
+          <span className="stat-card__value">{stats?.gayaDominant || '-'}</span>
+          <span className="stat-card__label">Gaya Belajar</span>
+        </div>
+      </div>
+      <div className="stat-card glass-card">
+        <div className="stat-card__icon stat-card__icon--green">
+          <Brain size={22} />
+        </div>
+        <div className="stat-card__info">
+          <span className="stat-card__value">{stats?.polaDominant || '-'}</span>
+          <span className="stat-card__label">Pola Belajar</span>
+        </div>
+      </div>
+      <div className="stat-card glass-card">
+        <div className="stat-card__icon stat-card__icon--amber">
+          <TrendingUp size={22} />
+        </div>
+        <div className="stat-card__info">
+          <span className="stat-card__value">{stats?.averageCompletion || 0}%</span>
+          <span className="stat-card__label">Rata-rata</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+StatCards.propTypes = { stats: PropTypes.object };
+
+function GayaChart({ data }) {
+  return (
+    <div className="dash-chart glass-card">
+      <div className="dash-chart__header">
+        <h3><Sparkles size={18} /> Profil Gaya Belajar</h3>
+        <span className="dash-chart__badge">Analisis Sistem</span>
+      </div>
+      <div className="dash-chart__body">
+        <ResponsiveContainer width="100%" height={260}>
+          <RadarChart data={data}>
+            <PolarGrid stroke="rgba(100,116,139,0.2)" />
+            <PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 13 }} />
+            <PolarRadiusAxis tick={false} axisLine={false} domain={[0, 100]} />
+            <Radar
+              name="Score"
+              dataKey="score"
+              stroke="var(--accent-blue)"
+              fill="var(--accent-blue)"
+              fillOpacity={0.2}
+              strokeWidth={2}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
+GayaChart.propTypes = { data: PropTypes.array };
+
+function PolaChart({ data }) {
+  return (
+    <div className="dash-chart glass-card">
+      <div className="dash-chart__header">
+        <h3><BarChart3 size={18} /> Distribusi Pola Belajar</h3>
+        <span className="dash-chart__badge">Perhitungan Logika</span>
+      </div>
+      <div className="dash-chart__body">
+        <ResponsiveContainer width="100%" height={260}>
+          <BarChart data={data} barSize={36}>
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,116,139,0.15)" />
+            <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 12 }} />
+            <YAxis tick={{ fill: '#64748b', fontSize: 12 }} domain={[0, 100]} />
+            <Tooltip
+              contentStyle={{
+                background: 'var(--bg-tertiary)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '8px',
+                color: 'var(--text-primary)',
+                fontSize: '13px',
+              }}
+            />
+            {/* The fill attribute of the Bar automatically maps to the "fill" key in data */}
+            <Bar dataKey="value" radius={[8, 8, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
+PolaChart.propTypes = { data: PropTypes.array };
+
+function SmartInsight({ stats, isPremium, setShowUpgradeModal }) {
+  const getGayaInsight = (gaya) => {
+    if (gaya === 'Visual') return 'Anda belajar paling efektif melalui diagram, grafik, video, dan visualisasi data. Gunakan mind-map dan infografis.';
+    if (gaya === 'Auditori') return 'Anda belajar paling efektif melalui diskusi, mendengarkan penjelasan, dan podcast.';
+    return 'Anda belajar paling efektif melalui praktik langsung, eksperimen, dan simulasi.';
+  };
+
+  const getPolaInsight = (pola) => {
+    if (pola === 'Reflective') return 'Anda suka merefleksikan dan mengulang materi untuk pemahaman yang lebih dalam. Catat poin kunci dan review secara berkala.';
+    if (pola === 'Consistent') return 'Anda memiliki rutinitas belajar yang teratur dan konsisten. Pertahankan jadwal belajar harian Anda.';
+    if (pola === 'Fast Learner') return 'Anda cenderung menyerap materi dengan cepat. Manfaatkan kecepatan ini dengan tantangan belajar yang lebih tinggi.';
+    if (pola === 'Balanced') return 'Anda memiliki keseimbangan yang baik antara berbagai metode belajar. Terus pertahankan fleksibilitas ini.';
+    return 'Anda memiliki pendekatan belajar yang unik.';
+  };
+
+  return (
+    <div className={`dash-insights glass-card ${!isPremium ? 'premium-locked' : ''}`}>
+      {!isPremium && (
+        <div className="premium-overlay">
+          <Lock size={32} className="premium-overlay__icon" />
+          <h3>Fitur Premium</h3>
+          <p>Upgrade untuk melihat Smart Insight dan Rekomendasi Belajar Personal.</p>
+          <button className="btn-primary" onClick={() => setShowUpgradeModal?.(true)}>
+            <Crown size={16} /> Upgrade Sekarang
+          </button>
+        </div>
+      )}
+      <div className="dash-chart__header">
+        <h3><Zap size={18} /> Smart Insight</h3>
+      </div>
+      <div className="insight-list">
+        <div className="insight-item">
+          <div className="insight-item__icon insight-item__icon--blue">
+            <Eye size={18} />
+          </div>
+          <div className="insight-item__content">
+            <h4>Gaya Belajar: {stats.gayaDominant}</h4>
+            <p>{getGayaInsight(stats.gayaDominant)}</p>
+          </div>
+        </div>
+        <div className="insight-item">
+          <div className="insight-item__icon insight-item__icon--purple">
+            <Brain size={18} />
+          </div>
+          <div className="insight-item__content">
+            <h4>Pola Belajar: {stats.polaDominant}</h4>
+            <p>{getPolaInsight(stats.polaDominant)}</p>
+          </div>
+        </div>
+        <div className="insight-item">
+          <div className="insight-item__icon insight-item__icon--green">
+            <Sparkles size={18} />
+          </div>
+          <div className="insight-item__content">
+            <h4>Rekomendasi</h4>
+            <p>Kombinasikan strategi belajar berdasarkan gaya dan pola Anda untuk hasil optimal.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+SmartInsight.propTypes = {
+  stats: PropTypes.object,
+  isPremium: PropTypes.bool,
+  setShowUpgradeModal: PropTypes.func,
+};
+
+// ─── Main Component ─────────────
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -53,6 +235,7 @@ export default function DashboardPage() {
   }
 
   const hasTests = stats && stats.totalTests > 0;
+  const isPremium = !!user?.isPremium;
 
   // Build chart data from latest test result
   const latestResult = hasTests ? stats.history[0] : null;
@@ -66,7 +249,7 @@ export default function DashboardPage() {
   const polaData = latestResult ? Object.entries(latestResult.polaBelajar?.scores || {}).map(([key, value]) => ({
     name: key.charAt(0).toUpperCase() + key.slice(1),
     value: Math.min(value, 100),
-    color: polaColors[key] || '#94a3b8',
+    fill: polaColors[key] || '#94a3b8',
   })) : [];
 
   return (
@@ -80,49 +263,11 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="dash-stats">
-        <div className="stat-card glass-card">
-          <div className="stat-card__icon stat-card__icon--blue">
-            <ClipboardList size={22} />
-          </div>
-          <div className="stat-card__info">
-            <span className="stat-card__value">{stats?.totalTests || 0}</span>
-            <span className="stat-card__label">Total Tes</span>
-          </div>
-        </div>
-        <div className="stat-card glass-card">
-          <div className="stat-card__icon stat-card__icon--purple">
-            <Eye size={22} />
-          </div>
-          <div className="stat-card__info">
-            <span className="stat-card__value">{stats?.gayaDominant || '-'}</span>
-            <span className="stat-card__label">Gaya Belajar</span>
-          </div>
-        </div>
-        <div className="stat-card glass-card">
-          <div className="stat-card__icon stat-card__icon--green">
-            <Brain size={22} />
-          </div>
-          <div className="stat-card__info">
-            <span className="stat-card__value">{stats?.polaDominant || '-'}</span>
-            <span className="stat-card__label">Pola Belajar</span>
-          </div>
-        </div>
-        <div className="stat-card glass-card">
-          <div className="stat-card__icon stat-card__icon--amber">
-            <TrendingUp size={22} />
-          </div>
-          <div className="stat-card__info">
-            <span className="stat-card__value">{stats?.averageCompletion || 0}%</span>
-            <span className="stat-card__label">Rata-rata</span>
-          </div>
-        </div>
-      </div>
+      <StatCards stats={stats} />
 
       {hasTests ? (
-        <div className={`dash-grid ${!user?.isPremium ? 'premium-locked' : ''}`}>
-          {!user?.isPremium && (
+        <div className={`dash-grid ${!isPremium ? 'premium-locked' : ''}`}>
+          {!isPremium && (
             <div className="premium-overlay" style={{ gridColumn: '1 / -1', zIndex: 10 }}>
               <Lock size={48} className="premium-overlay__icon" />
               <h3>Analisis Mendalam Dikunci</h3>
@@ -132,123 +277,10 @@ export default function DashboardPage() {
               </button>
             </div>
           )}
-          {/* Gaya Belajar Chart */}
-          <div className="dash-chart glass-card">
-            <div className="dash-chart__header">
-              <h3><Sparkles size={18} /> Profil Gaya Belajar</h3>
-              <span className="dash-chart__badge">Analisis Sistem</span>
-            </div>
-            <div className="dash-chart__body">
-              <ResponsiveContainer width="100%" height={260}>
-                <RadarChart data={gayaData}>
-                  <PolarGrid stroke="rgba(100,116,139,0.2)" />
-                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 13 }} />
-                  <PolarRadiusAxis tick={false} axisLine={false} domain={[0, 100]} />
-                  <Radar
-                    name="Score"
-                    dataKey="score"
-                    stroke="var(--accent-blue)"
-                    fill="var(--accent-blue)"
-                    fillOpacity={0.2}
-                    strokeWidth={2}
-                  />
-                </RadarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          {/* Pola Belajar Chart */}
-          <div className="dash-chart glass-card">
-            <div className="dash-chart__header">
-              <h3><BarChart3 size={18} /> Distribusi Pola Belajar</h3>
-              <span className="dash-chart__badge">Perhitungan Logika</span>
-            </div>
-            <div className="dash-chart__body">
-              <ResponsiveContainer width="100%" height={260}>
-                <BarChart data={polaData} barSize={36}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,116,139,0.15)" />
-                  <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 12 }} />
-                  <YAxis tick={{ fill: '#64748b', fontSize: 12 }} domain={[0, 100]} />
-                  <Tooltip
-                    contentStyle={{
-                      background: 'var(--bg-tertiary)',
-                      border: '1px solid var(--border-color)',
-                      borderRadius: '8px',
-                      color: 'var(--text-primary)',
-                      fontSize: '13px',
-                    }}
-                  />
-                  <Bar dataKey="value" radius={[8, 8, 0, 0]}>
-                    {polaData.map((entry, i) => (
-                      <Cell key={i} fill={entry.color} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          {/* Smart Insight */}
-          <div className={`dash-insights glass-card ${!user?.isPremium ? 'premium-locked' : ''}`}>
-            {!user?.isPremium && (
-              <div className="premium-overlay">
-                <Lock size={32} className="premium-overlay__icon" />
-                <h3>Fitur Premium</h3>
-                <p>Upgrade untuk melihat Smart Insight dan Rekomendasi Belajar Personal.</p>
-                <button className="btn-primary" onClick={() => setShowUpgradeModal?.(true)}>
-                  <Crown size={16} /> Upgrade Sekarang
-                </button>
-              </div>
-            )}
-            <div className="dash-chart__header">
-              <h3><Zap size={18} /> Smart Insight</h3>
-            </div>
-            <div className="insight-list">
-              <div className="insight-item">
-                <div className="insight-item__icon insight-item__icon--blue">
-                  <Eye size={18} />
-                </div>
-                <div className="insight-item__content">
-                  <h4>Gaya Belajar: {stats.gayaDominant}</h4>
-                  <p>
-                    {stats.gayaDominant === 'Visual'
-                      ? 'Anda belajar paling efektif melalui diagram, grafik, video, dan visualisasi data. Gunakan mind-map dan infografis.'
-                      : stats.gayaDominant === 'Auditori'
-                      ? 'Anda belajar paling efektif melalui diskusi, mendengarkan penjelasan, dan podcast.'
-                      : 'Anda belajar paling efektif melalui praktik langsung, eksperimen, dan simulasi.'}
-                  </p>
-                </div>
-              </div>
-              <div className="insight-item">
-                <div className="insight-item__icon insight-item__icon--purple">
-                  <Brain size={18} />
-                </div>
-                <div className="insight-item__content">
-                  <h4>Pola Belajar: {stats.polaDominant}</h4>
-                  <p>
-                    {stats.polaDominant === 'Reflective'
-                      ? 'Anda suka merefleksikan dan mengulang materi untuk pemahaman yang lebih dalam. Catat poin kunci dan review secara berkala.'
-                      : stats.polaDominant === 'Consistent'
-                      ? 'Anda memiliki rutinitas belajar yang teratur dan konsisten. Pertahankan jadwal belajar harian Anda.'
-                      : stats.polaDominant === 'Fast Learner'
-                      ? 'Anda cenderung menyerap materi dengan cepat. Manfaatkan kecepatan ini dengan tantangan belajar yang lebih tinggi.'
-                      : stats.polaDominant === 'Balanced'
-                      ? 'Anda memiliki keseimbangan yang baik antara berbagai metode belajar. Terus pertahankan fleksibilitas ini.'
-                      : 'Anda memiliki pendekatan belajar yang unik.'}
-                  </p>
-                </div>
-              </div>
-              <div className="insight-item">
-                <div className="insight-item__icon insight-item__icon--green">
-                  <Sparkles size={18} />
-                </div>
-                <div className="insight-item__content">
-                  <h4>Rekomendasi</h4>
-                  <p>Kombinasikan strategi belajar berdasarkan gaya dan pola Anda untuk hasil optimal.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          
+          <GayaChart data={gayaData} />
+          <PolaChart data={polaData} />
+          <SmartInsight stats={stats} isPremium={isPremium} setShowUpgradeModal={setShowUpgradeModal} />
         </div>
       ) : (
         <div className="dash-empty glass-card">

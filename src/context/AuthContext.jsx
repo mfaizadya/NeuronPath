@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -139,21 +140,27 @@ export function AuthProvider({ children }) {
     setUser(prev => ({ ...prev, isPremium: true }));
   };
 
+  const value = useMemo(() => ({
+    user,
+    loading,
+    login,
+    register,
+    logout,
+    updateProfile,
+    changePassword,
+    upgradePremium,
+  }), [user, loading]);
+
   return (
-    <AuthContext.Provider value={{
-      user,
-      loading,
-      login,
-      register,
-      logout,
-      updateProfile,
-      changePassword,
-      upgradePremium,
-    }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

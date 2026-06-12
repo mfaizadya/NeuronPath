@@ -38,6 +38,10 @@ export default function ChatWidget({ onUpgrade }) {
     }
   }, [initialized, hasPretest]);
 
+  const toggleWidget = () => {
+    setOpen(prev => !prev);
+  };
+
   // Auto scroll — always called, no conditional hook
   useEffect(() => {
     if (open) {
@@ -80,7 +84,7 @@ export default function ChatWidget({ onUpgrade }) {
       {/* ── Floating Button ── */}
       <button
         className={`chat-widget-fab ${open ? 'chat-widget-fab--active' : ''}`}
-        onClick={() => setOpen(prev => !prev)}
+        onClick={toggleWidget}
         aria-label="Buka konsultasi AI"
       >
         {open ? <X size={22} /> : <Bot size={22} />}

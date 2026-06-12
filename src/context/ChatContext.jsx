@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { useAuth } from './AuthContext';
 import { createConsultationSession } from '../services/aiService';
 import { getChatUsage, incrementChatUsage } from '../services/chatUsageService';
@@ -130,7 +131,7 @@ export function ChatProvider({ children }) {
                 firstMsg.includes('belum diketahui') ||
                 firstMsg.includes('belum mengerjakan pretest') ||
                 // greeting dari sesi lama yang belum pretest tapi sekarang sudah
-                (!hasPretest === false && firstMsg.includes('belum bisa melihat profil'));
+                (hasPretest && firstMsg.includes('belum bisa melihat profil'));
 
               if (needsPatch) {
                 return {
@@ -145,7 +146,7 @@ export function ChatProvider({ children }) {
             return s;
           });
           setSessions(patched);
-          const last = patched[patched.length - 1];
+          const last = patched.at(-1);
           setActiveId(last.id);
           setChatSession(buildAiSession(stats, last.messages));
         } else {
@@ -191,7 +192,7 @@ export function ChatProvider({ children }) {
       const updated = prev.filter(s => s.id !== id);
       if (id === activeId) {
         if (updated.length > 0) {
-          const last = updated[updated.length - 1];
+          const last = updated.at(-1);
           setActiveId(last.id);
           try { setChatSession(buildAiSession(userStatsRef.current, last.messages)); } catch { /* ignore */ }
         } else {
@@ -242,18 +243,29 @@ export function ChatProvider({ children }) {
     }
   }, [chatSession, activeId, isLimitReached, isPremium, user?.uid]);
 
+  const value = useMemo(() => ({
+    sessions, activeId, activeSession, chatSession,
+    chatCount, userStats, initialized, initError,
+    isLimitReached, isPremium, hasPretest,
+    selectSession, newChat, deleteSession, sendMessage,
+    setSessions, setActiveId,
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [
+    sessions, activeId, activeSession, chatSession,
+    chatCount, userStats, initialized, initError,
+    isLimitReached, isPremium, hasPretest,
+  ]);
+
   return (
-    <ChatContext.Provider value={{
-      sessions, activeId, activeSession, chatSession,
-      chatCount, userStats, initialized, initError,
-      isLimitReached, isPremium, hasPretest,
-      selectSession, newChat, deleteSession, sendMessage,
-      setSessions, setActiveId,
-    }}>
+    <ChatContext.Provider value={value}>
       {children}
     </ChatContext.Provider>
   );
 }
+
+ChatProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export const useChat = () => {
   const ctx = useContext(ChatContext);
