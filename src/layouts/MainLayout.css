@@ -44,7 +44,7 @@
   align-items: center;
   justify-content: center;
   color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+  box-shadow: 0 10px 24px rgba(0, 151, 110, 0.18);
 }
 
 .sidebar__brand {
@@ -114,9 +114,9 @@
 }
 
 .sidebar__link--active {
-  background: rgba(0, 212, 255, 0.1);
+  background: rgba(0, 151, 110, 0.08);
   color: var(--accent-blue);
-  border: 1px solid rgba(0, 212, 255, 0.15);
+  border: 1px solid rgba(0, 151, 110, 0.18);
 }
 
 .sidebar__link--active::before {

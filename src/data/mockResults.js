@@ -1,16 +1,16 @@
 // Hardcoded AI analysis results and dashboard data
 
 export const learningStyles = {
-  visual: { label: 'Visual', score: 78, color: '#00d4ff', icon: 'Eye' },
-  auditory: { label: 'Auditori', score: 55, color: '#7c3aed', icon: 'Headphones' },
-  kinesthetic: { label: 'Kinestetik', score: 42, color: '#10b981', icon: 'Hand' },
+  visual: { label: 'Visual', score: 78, color: 'var(--accent-blue)', icon: 'Eye' },
+  auditory: { label: 'Auditori', score: 55, color: 'var(--accent-purple)', icon: 'Headphones' },
+  kinesthetic: { label: 'Kinestetik', score: 42, color: '#50d6be', icon: 'Hand' },
 };
 
 export const learningPatterns = {
-  consistent: { label: 'Consistent', score: 72, color: '#00d4ff' },
-  fast: { label: 'Fast Learner', score: 60, color: '#f59e0b' },
-  reflective: { label: 'Reflective', score: 85, color: '#7c3aed' },
-  balanced: { label: 'Balanced', score: 68, color: '#10b981' },
+  consistent: { label: 'Consistent', score: 72, color: 'var(--accent-blue)' },
+  fast: { label: 'Fast Learner', score: 60, color: '#ffbf71' },
+  reflective: { label: 'Reflective', score: 85, color: 'var(--accent-purple)' },
+  balanced: { label: 'Balanced', score: 68, color: '#50d6be' },
 };
 
 export const generateResult = (answers) => {
@@ -37,7 +37,6 @@ export const generateResult = (answers) => {
   const auditoryScore = Math.round(30 + (gayaAvg * 8) + Math.random() * 10);
   const kinestheticScore = Math.round(25 + (gayaAvg * 7) + Math.random() * 10);
 
-  const styles = { visualScore, auditoryScore, kinestheticScore };
   const dominantStyle = visualScore >= auditoryScore && visualScore >= kinestheticScore
     ? 'Visual'
     : auditoryScore >= kinestheticScore

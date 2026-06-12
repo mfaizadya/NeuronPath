@@ -14,10 +14,10 @@ import {
 import './DashboardPage.css';
 
 const polaColors = {
-  consistent: '#00d4ff',
-  fast: '#f59e0b',
-  reflective: '#7c3aed',
-  balanced: '#10b981',
+  consistent: 'var(--accent-blue)',
+  fast: 'var(--accent-amber)',
+  reflective: 'var(--accent-purple)',
+  balanced: '#50d6be',
 };
 
 export default function DashboardPage() {
@@ -147,8 +147,8 @@ export default function DashboardPage() {
                   <Radar
                     name="Score"
                     dataKey="score"
-                    stroke="#00d4ff"
-                    fill="#00d4ff"
+                    stroke="var(--accent-blue)"
+                    fill="var(--accent-blue)"
                     fillOpacity={0.2}
                     strokeWidth={2}
                   />

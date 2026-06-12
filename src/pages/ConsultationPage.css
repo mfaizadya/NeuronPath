@@ -150,7 +150,7 @@
 
 .chat-form:focus-within {
   border-color: var(--accent-blue);
-  box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(0, 151, 110, 0.14);
 }
 
 .chat-textarea {

@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
-import { Zap, Brain, BarChart3, Sparkles, ArrowRight, Shield, Clock, Users, Globe2 } from 'lucide-react';
+import { Zap, Brain, BarChart3, Sparkles, ArrowRight, Shield, Clock, Users, Globe2, Moon, Sun } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 import './LandingPage.css';
 
 export default function LandingPage() {
+  const { theme, toggleTheme } = useTheme();
+
   return (
     <div className="landing">
       {/* Navbar */}
@@ -15,6 +18,15 @@ export default function LandingPage() {
             <span className="landing__logo-text">NeuronPath</span>
           </div>
           <div className="landing__nav-actions">
+            <button
+              type="button"
+              className="landing__theme-toggle"
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Aktifkan light mode' : 'Aktifkan dark mode'}
+              title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
             <span className="landing__language">
               <Globe2 size={18} />
               ID

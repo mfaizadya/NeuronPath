@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react';
 
 const ThemeContext = createContext(null);
@@ -5,8 +6,9 @@ const ThemeContext = createContext(null);
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('neuronpath_theme');
-    if (saved) return saved;
-    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    const userSelectedTheme = localStorage.getItem('neuronpath_theme_user_set') === 'true';
+    if (userSelectedTheme && (saved === 'light' || saved === 'dark')) return saved;
+    return 'light';
   });
 
   useEffect(() => {
@@ -15,6 +17,7 @@ export function ThemeProvider({ children }) {
   }, [theme]);
 
   const toggleTheme = () => {
+    localStorage.setItem('neuronpath_theme_user_set', 'true');
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 

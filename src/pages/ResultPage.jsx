@@ -104,8 +104,8 @@ export default function ResultPage() {
             <Radar
               name="Score"
               dataKey="score"
-              stroke="#00d4ff"
-              fill="#00d4ff"
+              stroke="var(--accent-blue)"
+              fill="var(--accent-blue)"
               fillOpacity={0.2}
               strokeWidth={2}
             />

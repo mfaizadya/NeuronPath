@@ -47,7 +47,7 @@
   font-size: 0.6875rem;
   padding: 4px 10px;
   border-radius: var(--radius-full);
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(0, 151, 110, 0.08);
   color: var(--accent-green);
   font-weight: 600;
 }
@@ -79,8 +79,8 @@
   flex-shrink: 0;
 }
 
-.history-card__result-icon--blue { background: rgba(0,212,255,0.12); color: var(--accent-blue); }
-.history-card__result-icon--purple { background: rgba(124,58,237,0.12); color: var(--accent-purple); }
+.history-card__result-icon--blue { background: rgba(0,151,110,0.1); color: var(--accent-blue); }
+.history-card__result-icon--purple { background: var(--panel-peach); color: var(--accent-purple); }
 
 .history-card__label {
   display: block;
