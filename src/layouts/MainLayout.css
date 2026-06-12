@@ -16,6 +16,11 @@
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
   transition: transform var(--transition-slow);
+  transform: translateX(-100%);
+}
+
+.sidebar--open {
+  transform: translateX(0);
 }
 
 .sidebar__header {
@@ -65,19 +70,6 @@
   letter-spacing: 1.5px;
   font-weight: 500;
 }
-
-.sidebar__close {
-  display: none;
-  background: none;
-  color: var(--text-secondary);
-  padding: 6px;
-  border-radius: var(--radius-sm);
-}
-
-.sidebar__close:hover {
-  background: var(--bg-hover);
-}
-
 /* Nav */
 .sidebar__nav {
   flex: 1;
@@ -210,7 +202,7 @@
   background: rgba(239, 68, 68, 0.15);
 }
 
-/* Overlay */
+/* Overlay — hanya tampil di mobile saat sidebar terbuka */
 .sidebar-overlay {
   display: none;
   position: fixed;
@@ -220,13 +212,24 @@
   z-index: 99;
 }
 
+@media (max-width: 1024px) {
+  .sidebar-overlay {
+    display: block;
+  }
+}
+
 /* =========== MAIN CONTENT =========== */
 .main-content {
   flex: 1;
-  margin-left: var(--sidebar-width);
+  margin-left: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: margin-left var(--transition-slow);
+}
+
+.main-layout--sidebar-open .main-content {
+  margin-left: var(--sidebar-width);
 }
 
 /* Topbar */
@@ -245,7 +248,7 @@
 }
 
 .topbar__menu {
-  display: none;
+  display: block;
   background: none;
   color: var(--text-secondary);
   padding: 8px;
@@ -298,27 +301,11 @@
 /* =========== RESPONSIVE =========== */
 
 @media (max-width: 1024px) {
-  .sidebar {
-    transform: translateX(-100%);
-  }
-
-  .sidebar--open {
-    transform: translateX(0);
-  }
-
-  .sidebar__close {
-    display: block;
-  }
-
-  .sidebar-overlay {
-    display: block;
-  }
-
-  .main-content {
+  .main-layout--sidebar-open .main-content {
     margin-left: 0;
   }
 
-  .topbar__menu {
+  .sidebar-overlay {
     display: block;
   }
 

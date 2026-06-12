@@ -34,21 +34,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoLogin = async () => {
-    setEmail('test@neuronpath.com');
-    setPassword('test12345678');
-    setLoading(true);
-    setError('');
-    try {
-      await login('test@neuronpath.com', 'test12345678');
-      navigate('/dashboard');
-    } catch (err) {
-      setError(getFirebaseErrorMessage(err));
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="auth-page">
       <div className="auth-bg">
@@ -113,23 +98,11 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="auth-divider">
-            <span>atau</span>
-          </div>
-
-          <button className="btn btn-secondary auth-demo" onClick={handleDemoLogin} disabled={loading}>
-            🚀 Coba Mode Demo
-          </button>
-
           <p className="auth-footer-text">
             Belum punya akun?{' '}
             <Link to="/register" className="auth-link">Daftar Sekarang</Link>
           </p>
         </div>
-
-        <p className="auth-demo-info">
-          Demo: <code>test@neuronpath.com</code> / <code>test12345678</code>
-        </p>
       </div>
     </div>
   );

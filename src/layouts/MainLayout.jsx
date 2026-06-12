@@ -9,7 +9,6 @@ import {
   UserCircle,
   LogOut,
   Menu,
-  X,
   Zap,
   ChevronRight,
   MessageSquare,
@@ -33,7 +32,7 @@ export default function MainLayout() {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const handleLogout = () => {
@@ -41,8 +40,15 @@ export default function MainLayout() {
     navigate('/login');
   };
 
+  // Tutup sidebar saat navigasi hanya di mobile
+  const handleNavClick = () => {
+    if (window.innerWidth <= 1024) {
+      setSidebarOpen(false);
+    }
+  };
+
   return (
-    <div className="main-layout">
+    <div className={`main-layout ${sidebarOpen ? 'main-layout--sidebar-open' : ''}`}>
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
@@ -60,9 +66,7 @@ export default function MainLayout() {
               <span className="sidebar__tagline">Smart Learning</span>
             </div>
           </div>
-          <button className="sidebar__close" onClick={() => setSidebarOpen(false)}>
-            <X size={20} />
-          </button>
+
         </div>
 
         <nav className="sidebar__nav">
@@ -74,7 +78,7 @@ export default function MainLayout() {
               className={({ isActive }) =>
                 `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`
               }
-              onClick={() => setSidebarOpen(false)}
+              onClick={handleNavClick}
             >
               <item.icon size={20} />
               <span>{item.label}</span>
@@ -110,7 +114,7 @@ export default function MainLayout() {
       {/* Main Content */}
       <div className="main-content">
         <header className="topbar">
-          <button className="topbar__menu" onClick={() => setSidebarOpen(true)}>
+          <button className="topbar__menu" onClick={() => setSidebarOpen(prev => !prev)} aria-label="Toggle sidebar">
             <Menu size={22} />
           </button>
           
