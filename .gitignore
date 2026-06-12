@@ -27,3 +27,6 @@ dist-ssr
 .env
 .env.local
 scripts/serviceAccountKey.json
+
+# Test files
+test-*.js

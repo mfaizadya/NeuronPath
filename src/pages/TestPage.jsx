@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getActiveQuestions } from '../services/questionService';
 import { saveTestResult } from '../services/testResultService';
-import { generateResult } from '../data/mockResults';
+import { generateResult } from '../data/scoringEngine';
 import { likertOptions } from '../data/pretestQuestions';
 import { ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react';
 import './TestPage.css';
@@ -87,7 +87,7 @@ export default function TestPage() {
         }
       }
 
-      navigate('/result', { state: { result } });
+      navigate(`/result/${result.id}`, { state: { result } });
     } catch (err) {
       console.error('Submit error:', err);
       setSubmitting(false);

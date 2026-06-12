@@ -1,7 +1,9 @@
-import { useLocation, Link, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useLocation, useParams, Link, Navigate } from 'react-router-dom';
+import { getTestResultById } from '../services/testResultService';
 import {
   Eye, Headphones, Hand, Brain, Sparkles, ArrowRight,
-  Download, Home, CheckCircle2
+  Home, CheckCircle2, Loader2
 } from 'lucide-react';
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis,
@@ -13,11 +15,58 @@ const styleIcons = { Visual: Eye, Auditori: Headphones, Kinestetik: Hand };
 
 export default function ResultPage() {
   const location = useLocation();
-  const result = location.state?.result;
+  const { resultId } = useParams();
+  const [result, setResult] = useState(location.state?.result || null);
+  const [loading, setLoading] = useState(!location.state?.result && !!resultId);
+  const [error, setError] = useState('');
 
-  if (!result) {
+  // If no state but has resultId in URL, fetch from Firestore
+  useEffect(() => {
+    const fetchResult = async () => {
+      if (result || !resultId) return;
+      
+      try {
+        setLoading(true);
+        const fetched = await getTestResultById(resultId);
+        if (fetched) {
+          setResult(fetched);
+        } else {
+          setError('Hasil tes tidak ditemukan.');
+        }
+      } catch (err) {
+        console.error('Failed to fetch result:', err);
+        setError('Gagal memuat hasil tes.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchResult();
+  }, [resultId, result]);
+
+  if (loading) {
+    return (
+      <div className="page-container" style={{ textAlign: 'center', paddingTop: '80px' }}>
+        <Loader2 size={32} className="spin" style={{ color: 'var(--accent-blue)' }} />
+        <p style={{ marginTop: 12, color: 'var(--text-secondary)' }}>Memuat hasil tes...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="page-container" style={{ textAlign: 'center', paddingTop: '80px' }}>
+        <p style={{ color: '#ef4444', marginBottom: 16 }}>{error}</p>
+        <Link to="/pretest" className="btn btn-primary">Ambil Pretest</Link>
+      </div>
+    );
+  }
+
+  // No result and no resultId — redirect to pretest
+  if (!result && !resultId) {
     return <Navigate to="/pretest" replace />;
   }
+
+  if (!result) return null;
 
   const { gayaBelajar, polaBelajar, insights } = result;
 
