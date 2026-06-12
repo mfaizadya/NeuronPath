@@ -5,13 +5,16 @@ import App from './App.jsx'
 import './index.css'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
+import { ChatProvider } from './context/ChatContext'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <App />
+          <ChatProvider>
+            <App />
+          </ChatProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

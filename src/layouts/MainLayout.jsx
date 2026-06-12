@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import UpgradeModal from '../components/UpgradeModal';
+import ChatWidget from '../components/ChatWidget';
 import './MainLayout.css';
 
 const navItems = [
@@ -144,6 +145,9 @@ export default function MainLayout() {
       </div>
 
       <UpgradeModal isOpen={showUpgradeModal} onClose={() => setShowUpgradeModal(false)} />
+
+      {/* Floating AI Chat Widget */}
+      <ChatWidget onUpgrade={() => setShowUpgradeModal(true)} />
     </div>
   );
 }
