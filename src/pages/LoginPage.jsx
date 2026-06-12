@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getFirebaseErrorMessage } from '../utils/firebaseErrors';
-import { Zap, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
+import { Zap, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
 import './AuthPages.css';
 
 export default function LoginPage() {
@@ -49,14 +49,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate('/');
-    }
-  };
-
   return (
     <div className="auth-page">
       <div className="auth-bg">
@@ -65,11 +57,6 @@ export default function LoginPage() {
       </div>
 
       <div className="auth-container animate-fade-in">
-        <button type="button" className="auth-back" onClick={handleBack}>
-          <ArrowLeft size={18} />
-          Kembali
-        </button>
-
         <Link to="/" className="auth-logo">
           <div className="auth-logo__icon"><Zap size={22} /></div>
           <span className="auth-logo__text">NeuronPath</span>
