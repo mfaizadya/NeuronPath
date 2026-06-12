@@ -129,7 +129,7 @@
   pointer-events: none;
 }
 
-.form-input--icon {
+.input-wrapper .form-input--icon {
   padding-left: 42px;
 }
 
