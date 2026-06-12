@@ -15,7 +15,7 @@ export default function ChatWidget({ onUpgrade }) {
   const location  = useLocation();
   const {
     activeSession, initialized, initError,
-    isLimitReached, isPremium, sendMessage,
+    isLimitReached, sendMessage, userStats,
   } = useChat();
 
   const [open, setOpen]       = useState(false);
@@ -26,17 +26,30 @@ export default function ChatWidget({ onUpgrade }) {
   const textareaRef    = useRef(null);
   const messages = activeSession?.messages || [];
 
-  // Hide widget on /consultation page (it has its own full UI)
-  const isConsultationPage = location.pathname === '/consultation';
-  if (isConsultationPage) return null;
+  // Buka otomatis di desktop jika user sudah punya riwayat pretest
+  const hasOpenedRef = useRef(false);
+  useEffect(() => {
+    if (
+      !hasOpenedRef.current &&
+      initialized &&
+      userStats?.totalTests > 0 &&
+      window.innerWidth > 768
+    ) {
+      hasOpenedRef.current = true;
+      setOpen(true);
+    }
+  }, [initialized, userStats]);
 
-  // Auto scroll
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // Auto scroll — always called, no conditional hook
   useEffect(() => {
     if (open) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, typing, open]);
+
+  // Hide widget on /consultation page — after all hooks
+  const isConsultationPage = location.pathname === '/consultation';
+  if (isConsultationPage) return null;
 
   const handleSend = async (e) => {
     e?.preventDefault();

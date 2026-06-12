@@ -104,8 +104,28 @@ export function ChatProvider({ children }) {
       try {
         const saved = isPremium ? loadSessions(user.uid) : [];
         if (saved.length > 0) {
-          setSessions(saved);
-          const last = saved[saved.length - 1];
+          // Patch greeting message di semua sesi yang masih pakai teks strip
+          const patched = saved.map(s => {
+            if (
+              s.messages?.length > 0 &&
+              s.messages[0].role === 'ai' &&
+              (s.messages[0].content.includes('cenderung **-**') ||
+               s.messages[0].content.includes('polamu **-**') ||
+               s.messages[0].content.includes('belum diketahui'))
+            ) {
+              const updatedGreeting = `Halo ${user?.username}! 👋 Saya Neuron, AI konsultan belajarmu.\n\nSaya lihat gaya belajarmu cenderung **${stats?.gayaDominant || 'belum diketahui'}** dan polamu **${stats?.polaDominant || 'belum diketahui'}**. Ada materi spesifik yang ingin kamu pelajari hari ini, atau butuh tips belajar yang cocok buat kamu?`;
+              return {
+                ...s,
+                messages: [
+                  { role: 'ai', content: updatedGreeting },
+                  ...s.messages.slice(1),
+                ],
+              };
+            }
+            return s;
+          });
+          setSessions(patched);
+          const last = patched[patched.length - 1];
           setActiveId(last.id);
           setChatSession(buildAiSession(stats, last.messages));
         } else {
