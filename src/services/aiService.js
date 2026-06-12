@@ -1,4 +1,3 @@
-const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 /**
@@ -9,6 +8,7 @@ const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
  * @returns {{ sendMessage: (text: string) => Promise<string> }}
  */
 export const createConsultationSession = (userData) => {
+  const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
   if (!OPENROUTER_API_KEY) {
     throw new Error(
       'API Key OpenRouter belum dikonfigurasi. Silakan tambahkan VITE_OPENROUTER_API_KEY di file .env'

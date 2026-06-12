@@ -10,6 +10,11 @@ describe('AI Service', () => {
 
 
 
+  it('throws error if API key is missing', () => {
+    import.meta.env.VITE_OPENROUTER_API_KEY = '';
+    expect(() => createConsultationSession({})).toThrow('API Key OpenRouter belum dikonfigurasi');
+  });
+
   it('creates session and sends message successfully', async () => {
     globalThis.fetch.mockResolvedValueOnce({
       ok: true,

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.21% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/23</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.22% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/9</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.14% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/7</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.68% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/19</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -109,40 +109,40 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -151,40 +151,40 @@
 import { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 &nbsp;
-const ThemeContext = createContext(null);
+const <span class="cstat-no" title="statement not covered" >ThemeContext = createContext(null);</span>
 &nbsp;
-export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() =&gt; {
-    const saved = localStorage.getItem('neuronpath_theme');
-    const userSelectedTheme = localStorage.getItem('neuronpath_theme_user_set') === 'true';
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (userSelectedTheme &amp;&amp; (<span class="branch-1 cbranch-no" title="branch not covered" >saved === 'light' || <span class="branch-2 cbranch-no" title="branch not covered" >s</span>aved === 'dark')) <span class="cstat-no" title="statement not covered" >r</span>eturn saved;</span>
-    return 'light';
+export function <span class="fstat-no" title="function not covered" >ThemeProvider({</span> children }) {
+  const [theme, <span class="cstat-no" title="statement not covered" >setTheme] = <span class="fstat-no" title="function not covered" >useState(() =&gt; {</span></span>
+    const saved = <span class="cstat-no" title="statement not covered" >localStorage.getItem('neuronpath_theme');</span>
+    const userSelectedTheme = <span class="cstat-no" title="statement not covered" >localStorage.getItem('neuronpath_theme_user_set') === 'true';</span>
+<span class="cstat-no" title="statement not covered" >    if (userSelectedTheme &amp;&amp; (saved === 'light' || saved === 'dark')) <span class="cstat-no" title="statement not covered" >return saved;</span></span>
+<span class="cstat-no" title="statement not covered" >    return 'light';</span>
   });
 &nbsp;
-  useEffect(() =&gt; {
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem('neuronpath_theme', theme);
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  useEffect(() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    document.documentElement.dataset.theme = theme;</span>
+<span class="cstat-no" title="statement not covered" >    localStorage.setItem('neuronpath_theme', theme);</span>
   }, [theme]);
 &nbsp;
-  const <span class="fstat-no" title="function not covered" >toggleTheme = () =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >toggleTheme = () =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    localStorage.setItem('neuronpath_theme_user_set', 'true');</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    setTheme(p</span>rev =&gt; <span class="cstat-no" title="statement not covered" >prev === 'dark' ? 'light' : 'dark');</span></span>
   };
 &nbsp;
-  const value = useMemo(() =&gt; ({ theme, toggleTheme }), [theme]);
+  const <span class="cstat-no" title="statement not covered" >value = <span class="fstat-no" title="function not covered" >useMemo(() =&gt; (<span class="cstat-no" title="statement not covered" >{</span> theme, toggleTheme }), [</span>theme]);</span>
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;ThemeContext.Provider value={value}&gt;
       {children}
     &lt;/ThemeContext.Provider&gt;
   );
 }
 &nbsp;
-ThemeProvider.propTypes = {
+<span class="cstat-no" title="statement not covered" >ThemeProvider.propTypes = {</span>
   children: PropTypes.node.isRequired,
 };
 &nbsp;
-export const <span class="fstat-no" title="function not covered" >useTheme = () =&gt; {</span>
+export const <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >useTheme = () =&gt; {</span></span>
   const <span class="cstat-no" title="statement not covered" >context = useContext(ThemeContext);</span>
 <span class="cstat-no" title="statement not covered" >  if (!context) <span class="cstat-no" title="statement not covered" >throw new Error('useTheme must be used within ThemeProvider');</span></span>
 <span class="cstat-no" title="statement not covered" >  return context;</span>
@@ -196,7 +196,7 @@ export const <span class="fstat-no" title="function not covered" >useTheme = () 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-12T13:49:05.848Z
+                at 2026-06-12T13:57:28.286Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/5</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -142,8 +142,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,7 +159,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -202,11 +202,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Component } from 'react';
@@ -214,12 +214,12 @@ import { AlertTriangle, RefreshCw } from 'lucide-react';
 import PropTypes from 'prop-types';
 &nbsp;
 export default class ErrorBoundary extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false, error: null };
+<span class="fstat-no" title="function not covered" >  constructor(p</span>rops) {
+<span class="cstat-no" title="statement not covered" >    super(props);</span>
+<span class="cstat-no" title="statement not covered" >    this.state = { hasError: false, error: null };</span>
   }
 &nbsp;
-  static getDerivedStateFromError(error) {
+  static <span class="fstat-no" title="function not covered" >getDerivedStateFromError(e</span>rror) {
 <span class="cstat-no" title="statement not covered" >    return { hasError: true, error };</span>
   }
 &nbsp;
@@ -231,8 +231,8 @@ export default class ErrorBoundary extends Component {
 <span class="cstat-no" title="statement not covered" >    this.setState({ hasError: false, error: null });</span>
   };
 &nbsp;
-  render() {
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (this.state.hasError) {
+<span class="fstat-no" title="function not covered" >  render() {</span>
+<span class="cstat-no" title="statement not covered" >    if (this.state.hasError) {</span>
 <span class="cstat-no" title="statement not covered" >      return (</span>
         &lt;div style={{
           display: 'flex',
@@ -275,11 +275,11 @@ export default class ErrorBoundary extends Component {
       );
     }
 &nbsp;
-    return this.props.children;
+<span class="cstat-no" title="statement not covered" >    return this.props.children;</span>
   }
 }
 &nbsp;
-ErrorBoundary.propTypes = {
+<span class="cstat-no" title="statement not covered" >ErrorBoundary.propTypes = {</span>
   children: PropTypes.node.isRequired,
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -289,7 +289,7 @@ ErrorBoundary.propTypes = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-12T13:49:05.848Z
+                at 2026-06-12T13:57:28.286Z
             </div>
         <script src="../prettify.js"></script>
         <script>
