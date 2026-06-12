@@ -1,38 +1,24 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { X, Crown, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { X, Crown, CheckCircle2, Sparkles } from 'lucide-react';
 import './UpgradeModal.css';
 
 export default function UpgradeModal({ isOpen, onClose }) {
-  const { upgradePremium } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
-  const handleUpgrade = async () => {
-    setLoading(true);
-    try {
-      // Simulasi loading payment gateway (2 detik)
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      await upgradePremium();
-      setSuccess(true);
-      setTimeout(() => {
-        onClose();
-        setSuccess(false);
-        setLoading(false);
-      }, 1500);
-    } catch (err) {
-      console.error('Upgrade failed', err);
-      setLoading(false);
-      alert('Gagal melakukan upgrade. Silakan coba lagi.');
-    }
+  const handleProceed = () => {
+    onClose();
+    navigate('/payment');
   };
 
   return (
     <div className="upgrade-modal-overlay">
       <div className="upgrade-modal">
-        <button className="upgrade-modal__close" onClick={onClose} disabled={loading || success}>
+        <button className="upgrade-modal__close" onClick={onClose}>
           <X size={20} />
         </button>
 
@@ -67,18 +53,8 @@ export default function UpgradeModal({ isOpen, onClose }) {
             <span className="upgrade-pricing__period">/ bulan</span>
           </div>
 
-          <button 
-            className="upgrade-btn" 
-            onClick={handleUpgrade}
-            disabled={loading || success}
-          >
-            {loading ? (
-              <><Loader2 size={18} className="spin" /> Memproses...</>
-            ) : success ? (
-              <><CheckCircle2 size={18} /> Berhasil!</>
-            ) : (
-              <><Sparkles size={18} /> Beli Sekarang</>
-            )}
+          <button className="upgrade-btn" onClick={handleProceed}>
+            <Sparkles size={18} /> Lanjut ke Pembayaran
           </button>
         </div>
       </div>

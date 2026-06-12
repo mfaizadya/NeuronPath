@@ -17,6 +17,7 @@ const HistoryPage = lazy(() => import('../pages/HistoryPage'));
 const AccountPage = lazy(() => import('../pages/AccountPage'));
 const ConsultationPage = lazy(() => import('../pages/ConsultationPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
+const PaymentPage = lazy(() => import('../pages/PaymentPage'));
 
 // Loading fallback
 const PageLoader = () => (
@@ -70,6 +71,9 @@ export default function AppRoutes() {
             <Route path="/account" element={<AccountPage />} />
             <Route path="/consultation" element={<ConsultationPage />} />
           </Route>
+
+          {/* Payment — protected, standalone (no sidebar) */}
+          <Route path="/payment" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
 
           {/* 404 */}
           <Route path="*" element={<NotFoundPage />} />

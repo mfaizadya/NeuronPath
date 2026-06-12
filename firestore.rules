@@ -2,13 +2,13 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Users: bisa baca/tulis dokumen sendiri, tapi TIDAK bisa ubah role/isPremium
+    // Users: bisa baca/tulis dokumen sendiri, tapi TIDAK bisa ubah role
     match /users/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
       allow create: if request.auth != null && request.auth.uid == uid;
       allow update: if request.auth != null && request.auth.uid == uid
         && !request.resource.data.diff(resource.data).affectedKeys()
-            .hasAny(['role', 'isPremium']);
+            .hasAny(['role']);
     }
 
     // Questions: semua user login bisa baca, hanya admin yang bisa tulis
