@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getUserDashboardStats } from '../services/testResultService';
 import { createConsultationSession } from '../services/aiService';
+import { getChatUsage, incrementChatUsage } from '../services/chatUsageService';
 import { useOutletContext } from 'react-router-dom';
 import { Bot, Send, Sparkles, Loader2, Lock, Crown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -41,11 +42,18 @@ export default function ConsultationPage() {
 
   // Initialize Chat Session with Context
   useEffect(() => {
-    // Load chat count from local storage
-    if (user?.uid) {
-      const savedCount = localStorage.getItem(`chatCount_${user.uid}`);
-      if (savedCount) setChatCount(parseInt(savedCount, 10));
-    }
+    // Load chat count from Firestore
+    const loadChatCount = async () => {
+      if (user?.uid) {
+        try {
+          const count = await getChatUsage(user.uid);
+          setChatCount(count);
+        } catch (err) {
+          console.warn('Failed to load chat usage:', err);
+        }
+      }
+    };
+    loadChatCount();
 
     const initChat = async () => {
       try {
@@ -87,14 +95,6 @@ export default function ConsultationPage() {
     if (!input.trim() || !chatSession || typing || isLimitReached) return;
 
     const userMessage = input.trim();
-    
-    // Update chat count
-    const newCount = chatCount + 1;
-    setChatCount(newCount);
-    if (user?.uid) {
-      localStorage.setItem(`chatCount_${user.uid}`, newCount.toString());
-    }
-
     setInput('');
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'; // reset height
@@ -108,6 +108,16 @@ export default function ConsultationPage() {
       const aiResponseText = response.text || 'Maaf, saya tidak bisa memproses permintaan Anda saat ini.';
       
       setMessages(prev => [...prev, { role: 'ai', content: aiResponseText }]);
+
+      // Increment chat count AFTER successful response
+      if (!user?.isPremium && user?.uid) {
+        try {
+          const newCount = await incrementChatUsage(user.uid);
+          setChatCount(newCount);
+        } catch (err) {
+          console.warn('Failed to update chat usage:', err);
+        }
+      }
     } catch (err) {
       console.error('Send message error:', err);
       setMessages(prev => [...prev, { role: 'ai', content: 'Maaf, terjadi kesalahan pada jaringan atau API limit.' }]);

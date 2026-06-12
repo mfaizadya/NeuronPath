@@ -195,7 +195,7 @@ export default function DashboardPage() {
                 <Lock size={32} className="premium-overlay__icon" />
                 <h3>Fitur Premium</h3>
                 <p>Upgrade untuk melihat Smart Insight dan Rekomendasi Belajar Personal.</p>
-                <button className="btn-primary" onClick={() => setShowUpgradeModal(true)}>
+                <button className="btn-primary" onClick={() => setShowUpgradeModal?.(true)}>
                   <Crown size={16} /> Upgrade Sekarang
                 </button>
               </div>
@@ -229,8 +229,12 @@ export default function DashboardPage() {
                     {stats.polaDominant === 'Reflective'
                       ? 'Anda suka merefleksikan dan mengulang materi untuk pemahaman yang lebih dalam. Catat poin kunci dan review secara berkala.'
                       : stats.polaDominant === 'Consistent'
-                      ? 'Anda memiliki rutinitas belajar yang teratur dan konsisten.'
-                      : 'Anda memiliki keseimbangan yang baik antara berbagai metode belajar.'}
+                      ? 'Anda memiliki rutinitas belajar yang teratur dan konsisten. Pertahankan jadwal belajar harian Anda.'
+                      : stats.polaDominant === 'Fast Learner'
+                      ? 'Anda cenderung menyerap materi dengan cepat. Manfaatkan kecepatan ini dengan tantangan belajar yang lebih tinggi.'
+                      : stats.polaDominant === 'Balanced'
+                      ? 'Anda memiliki keseimbangan yang baik antara berbagai metode belajar. Terus pertahankan fleksibilitas ini.'
+                      : 'Anda memiliki pendekatan belajar yang unik.'}
                   </p>
                 </div>
               </div>

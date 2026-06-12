@@ -123,8 +123,8 @@ neuronpath/
 
 | | |
 |---|---|
-| **Email** | `demo@neuronpath.com` |
-| **Password** | `demo12345678` |
+| **Email** | `test@neuronpath.com` |
+| **Password** | `test12345678` |
 
 > Akun demo harus di-seed terlebih dahulu menggunakan script `seedDemoUser.js`.
 

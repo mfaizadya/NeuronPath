@@ -6,46 +6,55 @@ export const polaQuestions = [
     id: 'p1',
     question: 'Saya lebih suka belajar secara rutin setiap hari dengan jadwal yang konsisten.',
     category: 'pola',
+    subcategory: 'consistent',
   },
   {
     id: 'p2',
     question: 'Saya cenderung menyelesaikan materi pelajaran lebih cepat dari waktu yang dijadwalkan.',
     category: 'pola',
+    subcategory: 'fast',
   },
   {
     id: 'p3',
     question: 'Saya sering merefleksikan ulang materi yang telah saya pelajari sebelumnya.',
     category: 'pola',
+    subcategory: 'reflective',
   },
   {
     id: 'p4',
     question: 'Saya bisa menyeimbangkan waktu belajar antara berbagai mata pelajaran secara merata.',
     category: 'pola',
+    subcategory: 'balanced',
   },
   {
     id: 'p5',
     question: 'Saya merasa lebih nyaman belajar di waktu yang sama setiap harinya.',
     category: 'pola',
+    subcategory: 'consistent',
   },
   {
     id: 'p6',
     question: 'Saya sering menyelesaikan tugas lebih awal dari tenggat waktu yang diberikan.',
     category: 'pola',
+    subcategory: 'fast',
   },
   {
     id: 'p7',
     question: 'Saya suka mengulang materi dari catatan atau video yang sudah saya pelajari sebelumnya.',
     category: 'pola',
+    subcategory: 'reflective',
   },
   {
     id: 'p8',
     question: 'Ketika belajar, saya membagi waktu secara teratur antara membaca, berlatih, dan istirahat.',
     category: 'pola',
+    subcategory: 'balanced',
   },
   {
     id: 'p9',
     question: 'Saya memiliki rutinitas belajar yang jarang saya ubah.',
     category: 'pola',
+    subcategory: 'fast',
   },
 ];
 
@@ -54,31 +63,37 @@ export const gayaQuestions = [
     id: 'g1',
     question: 'Saya lebih mudah memahami materi jika disajikan dalam bentuk diagram, grafik, atau gambar.',
     category: 'gaya',
+    subcategory: 'visual',
   },
   {
     id: 'g2',
     question: 'Saya lebih suka mendengarkan penjelasan guru atau podcast daripada membaca buku teks.',
     category: 'gaya',
+    subcategory: 'auditori',
   },
   {
     id: 'g3',
     question: 'Saya lebih mudah mengingat sesuatu ketika mempraktikkannya secara langsung.',
     category: 'gaya',
+    subcategory: 'kinestetik',
   },
   {
     id: 'g4',
     question: 'Saya sering menggunakan warna atau highlighter saat membuat catatan.',
     category: 'gaya',
+    subcategory: 'visual',
   },
   {
     id: 'g5',
     question: 'Saya lebih mudah mengingat informasi setelah mendiskusikannya dengan orang lain.',
     category: 'gaya',
+    subcategory: 'auditori',
   },
   {
     id: 'g6',
     question: 'Saya suka belajar melalui eksperimen, proyek, atau simulasi langsung.',
     category: 'gaya',
+    subcategory: 'kinestetik',
   },
 ];
 

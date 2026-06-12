@@ -43,7 +43,7 @@ export default function LoginPage() {
       await login('test@neuronpath.com', 'test12345678');
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message);
+      setError(getFirebaseErrorMessage(err));
     } finally {
       setLoading(false);
     }

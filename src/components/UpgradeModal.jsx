@@ -12,21 +12,21 @@ export default function UpgradeModal({ isOpen, onClose }) {
 
   const handleUpgrade = async () => {
     setLoading(true);
-    // Simulasi loading payment gateway (2 detik)
-    setTimeout(async () => {
-      try {
-        await upgradePremium();
-        setSuccess(true);
-        setTimeout(() => {
-          onClose();
-          setSuccess(false);
-          setLoading(false);
-        }, 1500);
-      } catch (err) {
-        console.error('Upgrade failed', err);
+    try {
+      // Simulasi loading payment gateway (2 detik)
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      await upgradePremium();
+      setSuccess(true);
+      setTimeout(() => {
+        onClose();
+        setSuccess(false);
         setLoading(false);
-      }
-    }, 2000);
+      }, 1500);
+    } catch (err) {
+      console.error('Upgrade failed', err);
+      setLoading(false);
+      alert('Gagal melakukan upgrade. Silakan coba lagi.');
+    }
   };
 
   return (
