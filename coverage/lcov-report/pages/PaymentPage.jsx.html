@@ -1126,7 +1126,7 @@ export default function <span class="fstat-no" title="function not covered" >Pay
   const [selectedMethod, <span class="cstat-no" title="statement not covered" >setSelectedMethod] = useState(null);</span>
   const [processing, <span class="cstat-no" title="statement not covered" >setProcessing] = useState(false);</span>
   const [success, <span class="cstat-no" title="statement not covered" >setSuccess] = useState(false);</span>
-  const [errorModal, <span class="cstat-no" title="statement not covered" >setErrorModal] = useState(null);</span> // null | string (pesan error)
+  const [errorModal, <span class="cstat-no" title="statement not covered" >setErrorModal] = useState(null); // null | string (pesan error)</span>
 &nbsp;
   // Kode aktivasi state
   const [activationCode, <span class="cstat-no" title="statement not covered" >setActivationCode] = useState('');</span>
@@ -1177,14 +1177,14 @@ export default function <span class="fstat-no" title="function not covered" >Pay
 <span class="cstat-no" title="statement not covered" >      await new <span class="fstat-no" title="function not covered" >Promise(r</span>esolve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, 1200))</span>;</span>
 <span class="cstat-no" title="statement not covered" >      await upgradePremium();</span>
 <span class="cstat-no" title="statement not covered" >      setSuccess(true);</span>
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >      setTimeout(() =&gt; <span class="cstat-no" title="statement not covered" >n</span>avigate('/dashboard'),</span> 2500);</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >      setTimeout(() =&gt; <span class="cstat-no" title="statement not covered" >n</span>avigate('/dashboard'), 2</span>500);</span>
     } catch {
 <span class="cstat-no" title="statement not covered" >      setActivationProcessing(false);</span>
 <span class="cstat-no" title="statement not covered" >      setErrorModal('Gagal mengaktifkan kode. Silakan coba lagi.');</span>
     }
   };
 &nbsp;
-  const selectedOption = <span class="cstat-no" title="statement not covered" >PAYMENT_METHODS.<span class="fstat-no" title="function not covered" >flatMap(g</span> =&gt; <span class="cstat-no" title="statement not covered" >g.options).<span class="fstat-no" title="function not covered" ></span>find(o</span> =&gt; <span class="cstat-no" title="statement not covered" >o.id === selectedMethod);</span></span>
+  const selectedOption = <span class="cstat-no" title="statement not covered" >PAYMENT_METHODS.<span class="fstat-no" title="function not covered" >flatMap(g</span> =&gt; <span class="cstat-no" title="statement not covered" >g.options)</span>.<span class="fstat-no" title="function not covered" >find(o</span> =&gt; <span class="cstat-no" title="statement not covered" >o.id === selectedMethod)</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (success) {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
@@ -1211,13 +1211,13 @@ export default function <span class="fstat-no" title="function not covered" >Pay
         &lt;ErrorModal
           message={errorModal}
 <span class="fstat-no" title="function not covered" >          onClose={() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etErrorModal(null)}</span>
-<span class="fstat-no" title="function not covered" >          onRetry={() =&gt; {</span> <span class="cstat-no" title="statement not covered" >setErrorModal(null); }}</span>
+<span class="fstat-no" title="function not covered" >          onRetry={() =&gt; {</span> <span class="cstat-no" title="statement not covered" >setErrorModal(null); }</span>}
         /&gt;
       )}
 &nbsp;
       {/* Header */}
       &lt;div className="payment-header"&gt;
-        &lt;button className="payment-back" <span class="fstat-no" title="function not covered" >onClick={() =&gt; <span class="cstat-no" title="statement not covered" >s</span>tep === 0 ? navigate(-1) : setStep(step - 1)}</span>&gt;
+        &lt;button className="payment-back" <span class="fstat-no" title="function not covered" >onClick={() =&gt; <span class="cstat-no" title="statement not covered" >s</span>tep === 0 ? navigate(-1) : setStep(step - 1)}&gt;</span>
           &lt;ArrowLeft size={18} /&gt; Kembali
         &lt;/button&gt;
         &lt;div className="payment-header__brand"&gt;
@@ -1341,7 +1341,7 @@ export default function <span class="fstat-no" title="function not covered" >Pay
                       type="text"
                       placeholder="Contoh: NEURON2026"
                       value={activationCode}
-<span class="fstat-no" title="function not covered" >                      onChange={e</span> =&gt; { <span class="cstat-no" title="statement not covered" >setActivationCode(e.target.value.toUpperCase()); <span class="cstat-no" title="statement not covered" >s</span>etActivationError(''); }}</span>
+<span class="fstat-no" title="function not covered" >                      onChange={e</span> =&gt; { <span class="cstat-no" title="statement not covered" >setActivationCode(e.target.value.toUpperCase()); <span class="cstat-no" title="statement not covered" >s</span>etActivationError(''); }</span>}
                       maxLength={20}
                       spellCheck={false}
                     /&gt;
@@ -1391,7 +1391,7 @@ export default function <span class="fstat-no" title="function not covered" >Pay
                   &lt;h4&gt;Nomor Virtual Account&lt;/h4&gt;
                   &lt;div className="payment-va"&gt;
                     &lt;span className="payment-va__number"&gt;8277 4821 9034 7712&lt;/span&gt;
-                    &lt;button className="payment-va__copy" <span class="fstat-no" title="function not covered" >onClick={() =&gt; <span class="cstat-no" title="statement not covered" >n</span>avigator.clipboard?.writeText('8277482190347712')}</span>&gt;
+                    &lt;button className="payment-va__copy" <span class="fstat-no" title="function not covered" >onClick={() =&gt; <span class="cstat-no" title="statement not covered" >n</span>avigator.clipboard?.writeText('8277482190347712')}&gt;</span>
                       Salin
                     &lt;/button&gt;
                   &lt;/div&gt;
@@ -1519,7 +1519,7 @@ export default function <span class="fstat-no" title="function not covered" >Pay
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-13T17:17:20.675Z
+                at 2026-06-13T18:07:45.416Z
             </div>
         <script src="../prettify.js"></script>
         <script>

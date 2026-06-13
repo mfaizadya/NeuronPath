@@ -653,7 +653,7 @@ export function <span class="fstat-no" title="function not covered" >ChatProvide
 <span class="cstat-no" title="statement not covered" >  userStatsRef.current = userStats;</span>
 &nbsp;
   const isLimitReached = <span class="cstat-no" title="statement not covered" >!isPremium &amp;&amp; chatCount &gt;= FREE_LIMIT;</span>
-  const activeSession  = <span class="cstat-no" title="statement not covered" >sessions.<span class="fstat-no" title="function not covered" >find(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id === activeId) </span>|| null;</span>
+  const activeSession  = <span class="cstat-no" title="statement not covered" >sessions.<span class="fstat-no" title="function not covered" >find(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id === activeId)</span> || null;</span>
 &nbsp;
   // ── Persist (premium only) ──
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  useEffect(() =&gt; {</span></span>
@@ -663,7 +663,7 @@ export function <span class="fstat-no" title="function not covered" >ChatProvide
   }, [sessions, user?.uid, isPremium]);
 &nbsp;
   // ── Build AI session ──
-  const <span class="cstat-no" title="statement not covered" >buildAiSession = <span class="fstat-no" title="function not covered" >useCallback((s</span>tats, existingMessages = <span class="branch-0 cbranch-no" title="branch not covered" >[])</span> =&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" >buildAiSession = <span class="fstat-no" title="function not covered" >useCallback((s</span>tats, existingMessages = <span class="branch-0 cbranch-no" title="branch not covered" >[]) =&gt; {</span></span>
     const gayaDominant = (<span class="cstat-no" title="statement not covered" >stats?.gayaDominant &amp;&amp; stats.gayaDominant !== '-')</span>
       ? stats.gayaDominant : 'Belum diketahui';
     const polaDominant = (<span class="cstat-no" title="statement not covered" >stats?.polaDominant &amp;&amp; stats.polaDominant !== '-')</span>
@@ -677,7 +677,7 @@ export function <span class="fstat-no" title="function not covered" >ChatProvide
     const <span class="cstat-no" title="statement not covered" >session = createConsultationSession(userData);</span>
 <span class="cstat-no" title="statement not covered" >    existingMessages.<span class="fstat-no" title="function not covered" >forEach(m</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (m.role === 'user')      <span class="cstat-no" title="statement not covered" >session.history.push({ role: 'user',      content: m.content });</span></span>
-      else if (<span class="cstat-no" title="statement not covered" >m.role === 'ai')   <span class="cstat-no" title="statement not covered" >session.history.push({ role: 'assistant', content: m.content });</span></span>
+      else <span class="cstat-no" title="statement not covered" >if (m.role === 'ai')   <span class="cstat-no" title="statement not covered" >session.history.push({ role: 'assistant', content: m.content });</span></span>
     });
 <span class="cstat-no" title="statement not covered" >    return session;</span>
   }, [user?.username]);
@@ -755,7 +755,7 @@ export function <span class="fstat-no" title="function not covered" >ChatProvide
 &nbsp;
   // ── Actions ──
   const <span class="cstat-no" title="statement not covered" >selectSession = <span class="fstat-no" title="function not covered" >useCallback((i</span>d) =&gt; {</span>
-    const target = <span class="cstat-no" title="statement not covered" >sessions.<span class="fstat-no" title="function not covered" >find(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id === id);</span></span>
+    const target = <span class="cstat-no" title="statement not covered" >sessions.<span class="fstat-no" title="function not covered" >find(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id === id)</span>;</span>
 <span class="cstat-no" title="statement not covered" >    if (!target) <span class="cstat-no" title="statement not covered" >return;</span></span>
 <span class="cstat-no" title="statement not covered" >    setActiveId(id);</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
@@ -775,12 +775,12 @@ export function <span class="fstat-no" title="function not covered" >ChatProvide
 &nbsp;
   const <span class="cstat-no" title="statement not covered" >deleteSession = <span class="fstat-no" title="function not covered" >useCallback((i</span>d) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    setSessions(p</span>rev =&gt; {</span>
-      const updated = <span class="cstat-no" title="statement not covered" >prev.<span class="fstat-no" title="function not covered" >filter(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id !== id);</span></span>
+      const updated = <span class="cstat-no" title="statement not covered" >prev.<span class="fstat-no" title="function not covered" >filter(s</span> =&gt; <span class="cstat-no" title="statement not covered" >s.id !== id)</span>;</span>
 <span class="cstat-no" title="statement not covered" >      if (id === activeId) {</span>
 <span class="cstat-no" title="statement not covered" >        if (updated.length &gt; 0) {</span>
           const last = <span class="cstat-no" title="statement not covered" >updated.at(-1);</span>
 <span class="cstat-no" title="statement not covered" >          setActiveId(last.id);</span>
-<span class="cstat-no" title="statement not covered" >          try { <span class="cstat-no" title="statement not covered" >setChatSession(buildAiSession(userStatsRef.current, last.messages)); } catch {</span> /* ignore */ }</span>
+<span class="cstat-no" title="statement not covered" >          try { <span class="cstat-no" title="statement not covered" >setChatSession(buildAiSession(userStatsRef.current, last.messages)); }</span> catch { /* ignore */ }</span>
         } else {
 <span class="cstat-no" title="statement not covered" >          setActiveId(null);</span>
 <span class="cstat-no" title="statement not covered" >          setChatSession(null);</span>
@@ -862,7 +862,7 @@ export const <span class="cstat-no" title="statement not covered" ><span class="
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-13T17:17:20.675Z
+                at 2026-06-13T18:07:45.416Z
             </div>
         <script src="../prettify.js"></script>
         <script>
