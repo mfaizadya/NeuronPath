@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createUserProfile, getUserProfile, updateUserProfile, upgradeUserToPremium } from './userService';
+import { createUserProfile, getUserProfile, updateUserProfile, upgradeUserToPremium } from '../src/services/userService';
 import { getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 vi.mock('firebase/firestore', () => {
@@ -11,7 +11,7 @@ vi.mock('firebase/firestore', () => {
     serverTimestamp: vi.fn(() => 'MOCK_TIMESTAMP'),
   };
 });
-vi.mock('../config/firebase', () => ({
+vi.mock('../src/config/firebase', () => ({
   db: {},
 }));
 

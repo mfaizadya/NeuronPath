@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getFirebaseErrorMessage } from './firebaseErrors';
+import { getFirebaseErrorMessage } from '../src/utils/firebaseErrors';
 
 describe('Firebase Errors Util', () => {
   it('returns correct message for known codes', () => {

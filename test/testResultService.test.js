@@ -6,7 +6,7 @@ import {
   getTestResultById,
   deleteTestResult,
   getUserDashboardStats
-} from './testResultService';
+} from '../src/services/testResultService';
 import { getDoc, getDocs, addDoc, deleteDoc } from 'firebase/firestore';
 
 vi.mock('firebase/firestore', () => {
@@ -24,7 +24,7 @@ vi.mock('firebase/firestore', () => {
     serverTimestamp: vi.fn(() => 'MOCK_TIMESTAMP'),
   };
 });
-vi.mock('../config/firebase', () => ({
+vi.mock('../src/config/firebase', () => ({
   db: {},
 }));
 

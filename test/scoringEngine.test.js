@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateResult } from './scoringEngine';
+import { generateResult } from '../src/data/scoringEngine';
 
 describe('Scoring Engine', () => {
   it('calculates correct scores and dominant style/pattern', () => {
