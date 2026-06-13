@@ -16,7 +16,7 @@ export default function ChatWidget({ onUpgrade }) {
     isLimitReached, sendMessage, hasPretest,
   } = useChat();
 
-  const [open, setOpen]       = useState(false);
+  const [open, setOpen]       = useState(true);
   const [input, setInput]     = useState('');
   const [typing, setTyping]   = useState(false);
 
@@ -44,8 +44,8 @@ export default function ChatWidget({ onUpgrade }) {
 
   // Auto scroll — always called, no conditional hook
   useEffect(() => {
-    if (open) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (open && messagesEndRef.current && typeof messagesEndRef.current.scrollIntoView === 'function') {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, typing, open]);
 
@@ -192,8 +192,8 @@ export default function ChatWidget({ onUpgrade }) {
                 className="chat-widget__textarea"
                 placeholder={
                   isLimitReached ? 'Batas pesan tercapai...'
-                  : !initialized  ? 'Menyiapkan AI...'
-                  : 'Tanya sesuatu...'
+                  : !initialized ? 'Menyiapkan AI...'
+                  : 'Ketik pesan...'
                 }
                 value={input}
                 onChange={handleInput}

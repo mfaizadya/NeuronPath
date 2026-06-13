@@ -14,7 +14,7 @@ import {
 import { auth } from '../config/firebase';
 import { createUserProfile, getUserProfile, updateUserProfile, upgradeUserToPremium } from '../services/userService';
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);

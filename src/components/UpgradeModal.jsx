@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { X, Crown, CheckCircle2, Sparkles } from 'lucide-react';
 import './UpgradeModal.css';
 
-export default function UpgradeModal({ isOpen, onClose }) {
+export default function UpgradeModal({ isOpen, onClose, onConfirm }) {
 
   const navigate = useNavigate();
 
@@ -12,6 +12,7 @@ export default function UpgradeModal({ isOpen, onClose }) {
 
   const handleProceed = () => {
     onClose();
+    if (onConfirm) onConfirm();
     navigate('/payment');
   };
 
@@ -65,4 +66,5 @@ export default function UpgradeModal({ isOpen, onClose }) {
 UpgradeModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func,
 };

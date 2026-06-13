@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -270,7 +270,22 @@
 <a name='L205'></a><a href='#L205'>205</a>
 <a name='L206'></a><a href='#L206'>206</a>
 <a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -296,7 +311,22 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -502,12 +532,27 @@ export default function <span class="fstat-no" title="function not covered" >Tes
 <span class="cstat-no" title="statement not covered" >      try {</span>
         const firestoreQuestions = <span class="cstat-no" title="statement not covered" >await getActiveQuestions();</span>
 <span class="cstat-no" title="statement not covered" >        if (firestoreQuestions.length &gt; 0) {</span>
-          // Map Firestore format to local format
-<span class="cstat-no" title="statement not covered" >          setQuestions(firestoreQuestions.<span class="fstat-no" title="function not covered" >map(q</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-            id: q.id,
-            question: q.questionText,
-            category: q.category,
-          })));
+          // Assign scoring ID deterministik berdasarkan order dan category
+          // Pola: order 1-9 → p1-p9, Gaya: order 10-15 → g1-g6
+          const gayaCounter = <span class="cstat-no" title="statement not covered" >{ count: 0 };</span>
+          const polaCounter = <span class="cstat-no" title="statement not covered" >{ count: 0 };</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          setQuestions(firestoreQuestions.<span class="fstat-no" title="function not covered" >map(q</span> =&gt; {</span>
+            let scoringId;
+<span class="cstat-no" title="statement not covered" >            if (q.category === 'gaya') {</span>
+<span class="cstat-no" title="statement not covered" >              gayaCounter.count += 1;</span>
+<span class="cstat-no" title="statement not covered" >              scoringId = `g${gayaCounter.count}`;</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >              polaCounter.count += 1;</span>
+<span class="cstat-no" title="statement not covered" >              scoringId = `p${polaCounter.count}`;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            return {</span>
+              id: scoringId,
+              firestoreId: q.id,
+              question: q.questionText,
+              category: q.category,
+            };
+          }));
         } else {
           // Fallback to hardcoded questions if Firestore is empty
           const { getAllQuestions } = <span class="cstat-no" title="statement not covered" >await import('../data/pretestQuestions');</span>
@@ -691,7 +736,7 @@ export default function <span class="fstat-no" title="function not covered" >Tes
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-12T13:57:28.286Z
+                at 2026-06-13T17:17:20.675Z
             </div>
         <script src="../prettify.js"></script>
         <script>
