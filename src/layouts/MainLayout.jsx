@@ -52,13 +52,13 @@ export default function MainLayout() {
     <div className={`main-layout ${sidebarOpen ? 'main-layout--sidebar-open' : ''}`}>
       {/* Mobile overlay */}
       {sidebarOpen && (
-        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
+        <button className="sidebar-overlay" onClick={() => setSidebarOpen(false)} aria-label="Tutup sidebar" />
       )}
 
       {/* Sidebar */}
       <aside className={`sidebar ${sidebarOpen ? 'sidebar--open' : ''}`}>
         <div className="sidebar__header">
-          <div className="sidebar__logo" onClick={() => navigate('/dashboard')}>
+          <button className="sidebar__logo" onClick={() => navigate('/dashboard')} aria-label="Ke Dashboard">
             <div className="sidebar__logo-icon">
               <Zap size={24} />
             </div>
@@ -66,7 +66,7 @@ export default function MainLayout() {
               <span className="sidebar__brand">NeuronPath</span>
               <span className="sidebar__tagline">Smart Learning</span>
             </div>
-          </div>
+          </button>
 
         </div>
 
@@ -99,7 +99,7 @@ export default function MainLayout() {
                 {user?.isPremium ? (
                   <span className="badge badge--premium" title="Premium User"><Crown size={12} /> PRO</span>
                 ) : (
-                  <span className="badge badge--free" onClick={() => setShowUpgradeModal(true)}>FREE</span>
+                  <button className="badge badge--free" onClick={() => setShowUpgradeModal(true)} type="button">FREE</button>
                 )}
               </span>
               <span className="sidebar__email">{user?.email || ''}</span>
