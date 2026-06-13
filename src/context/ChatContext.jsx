@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { useAuth } from './AuthContext';
 import { createConsultationSession } from '../services/aiService';
 import { getChatUsage, incrementChatUsage } from '../services/chatUsageService';
@@ -72,10 +71,15 @@ export function ChatProvider({ children }) {
 
   // ── Build AI session ──
   const buildAiSession = useCallback((stats, existingMessages = []) => {
+    const gayaDominant = (stats?.gayaDominant && stats.gayaDominant !== '-')
+      ? stats.gayaDominant : 'Belum diketahui';
+    const polaDominant = (stats?.polaDominant && stats.polaDominant !== '-')
+      ? stats.polaDominant : 'Belum diketahui';
+
     const userData = {
       username:     user?.username,
-      gayaDominant: stats?.gayaDominant || 'Belum diketahui',
-      polaDominant: stats?.polaDominant || 'Belum diketahui',
+      gayaDominant,
+      polaDominant,
     };
     const session = createConsultationSession(userData);
     existingMessages.forEach(m => {
@@ -263,9 +267,6 @@ export function ChatProvider({ children }) {
   );
 }
 
-ChatProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export const useChat = () => {
   const ctx = useContext(ChatContext);

@@ -23,12 +23,27 @@ export default function TestPage() {
       try {
         const firestoreQuestions = await getActiveQuestions();
         if (firestoreQuestions.length > 0) {
-          // Map Firestore format to local format
-          setQuestions(firestoreQuestions.map(q => ({
-            id: q.id,
-            question: q.questionText,
-            category: q.category,
-          })));
+          // Assign scoring ID deterministik berdasarkan order dan category
+          // Pola: order 1-9 → p1-p9, Gaya: order 10-15 → g1-g6
+          const gayaCounter = { count: 0 };
+          const polaCounter = { count: 0 };
+
+          setQuestions(firestoreQuestions.map(q => {
+            let scoringId;
+            if (q.category === 'gaya') {
+              gayaCounter.count += 1;
+              scoringId = `g${gayaCounter.count}`;
+            } else {
+              polaCounter.count += 1;
+              scoringId = `p${polaCounter.count}`;
+            }
+            return {
+              id: scoringId,
+              firestoreId: q.id,
+              question: q.questionText,
+              category: q.category,
+            };
+          }));
         } else {
           // Fallback to hardcoded questions if Firestore is empty
           const { getAllQuestions } = await import('../data/pretestQuestions');

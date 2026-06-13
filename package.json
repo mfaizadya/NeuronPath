@@ -15,7 +15,7 @@
     "@openrouter/sdk": "^0.12.79",
     "firebase": "^12.12.1",
     "lucide-react": "^1.8.0",
-    "prop-types": "^15.8.1",
+    "prop-types": "15.8.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-markdown": "^10.1.0",

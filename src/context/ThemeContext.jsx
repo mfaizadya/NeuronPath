@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const ThemeContext = createContext(null);
 
@@ -13,7 +12,7 @@ export function ThemeProvider({ children }) {
   });
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('neuronpath_theme', theme);
   }, [theme]);
 
@@ -22,18 +21,12 @@ export function ThemeProvider({ children }) {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
-  const value = useMemo(() => ({ theme, toggleTheme }), [theme]);
-
   return (
-    <ThemeContext.Provider value={value}>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
 }
-
-ThemeProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
