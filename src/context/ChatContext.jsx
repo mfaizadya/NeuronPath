@@ -57,7 +57,9 @@ export function ChatProvider({ children }) {
 
   // Ref to avoid stale closure in buildAiSession
   const userStatsRef = useRef(null);
-  userStatsRef.current = userStats;
+  useEffect(() => {
+    userStatsRef.current = userStats;
+  }, [userStats]);
 
   const isLimitReached = !isPremium && chatCount >= FREE_LIMIT;
   const activeSession  = sessions.find(s => s.id === activeId) || null;
@@ -196,7 +198,7 @@ export function ChatProvider({ children }) {
       if (user?.uid && isPremium) saveSessions(user.uid, updated);
       return updated;
     });
-  }, [activeId, buildAiSession, user?.uid, isPremium]);
+  }, [activeId, buildAiSession, user, isPremium]);
 
   const sendMessage = useCallback(async (text) => {
     if (!text.trim() || !chatSession || isLimitReached) return;
@@ -234,7 +236,7 @@ export function ChatProvider({ children }) {
       ));
       throw err;
     }
-  }, [chatSession, activeId, isLimitReached, isPremium, user?.uid]);
+  }, [chatSession, activeId, isLimitReached, isPremium, user]);
 
   const value = useMemo(() => ({
     sessions, activeId, activeSession, chatSession,
