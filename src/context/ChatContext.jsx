@@ -125,27 +125,16 @@ export function ChatProvider({ children }) {
       try {
         const saved = isPremium ? loadSessions(user.uid) : [];
         if (saved.length > 0) {
-          // Patch greeting di semua sesi yang sudah tidak relevan dengan kondisi user saat ini
+          // Selalu patch greeting pertama di semua sesi dengan data terbaru
           const patched = saved.map(s => {
             if (s.messages?.length > 0 && s.messages[0].role === 'ai') {
-              const firstMsg = s.messages[0].content;
-              const needsPatch =
-                firstMsg.includes('cenderung **-**') ||
-                firstMsg.includes('polamu **-**') ||
-                firstMsg.includes('belum diketahui') ||
-                firstMsg.includes('belum mengerjakan pretest') ||
-                // greeting dari sesi lama yang belum pretest tapi sekarang sudah
-                (hasPretest && firstMsg.includes('belum bisa melihat profil'));
-
-              if (needsPatch) {
-                return {
-                  ...s,
-                  messages: [
-                    { role: 'ai', content: greeting },
-                    ...s.messages.slice(1),
-                  ],
-                };
-              }
+              return {
+                ...s,
+                messages: [
+                  { role: 'ai', content: greeting },
+                  ...s.messages.slice(1),
+                ],
+              };
             }
             return s;
           });
