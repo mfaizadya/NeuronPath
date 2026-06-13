@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getChatUsage, incrementChatUsage } from './chatUsageService';
+import { getChatUsage, incrementChatUsage } from '../src/services/chatUsageService';
 import { getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 // Mock firebase
@@ -11,7 +11,7 @@ vi.mock('firebase/firestore', () => {
     updateDoc: vi.fn(),
   };
 });
-vi.mock('../config/firebase', () => ({
+vi.mock('../src/config/firebase', () => ({
   db: {},
 }));
 

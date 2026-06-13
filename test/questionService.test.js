@@ -6,7 +6,7 @@ import {
   updateQuestion,
   toggleQuestionActive,
   deleteQuestion
-} from './questionService';
+} from '../src/services/questionService';
 import { getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 vi.mock('firebase/firestore', () => {
@@ -23,7 +23,7 @@ vi.mock('firebase/firestore', () => {
     serverTimestamp: vi.fn(() => 'MOCK_TIMESTAMP'),
   };
 });
-vi.mock('../config/firebase', () => ({
+vi.mock('../src/config/firebase', () => ({
   db: {},
 }));
 

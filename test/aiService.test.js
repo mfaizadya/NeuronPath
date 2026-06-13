@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createConsultationSession } from './aiService';
+import { createConsultationSession } from '../src/services/aiService';
 
 describe('AI Service', () => {
   beforeEach(() => {
@@ -7,8 +7,6 @@ describe('AI Service', () => {
     globalThis.fetch = vi.fn();
     import.meta.env.VITE_OPENROUTER_API_KEY = 'test-key';
   });
-
-
 
   it('throws error if API key is missing', () => {
     import.meta.env.VITE_OPENROUTER_API_KEY = '';
