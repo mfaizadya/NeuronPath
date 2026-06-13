@@ -540,3 +540,29 @@ img {
     padding: 14px 24px;
   }
 }
+
+/* Logo icon image styles */
+.logo-icon-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  display: block;
+}
+
+.logo-icon-img--landing {
+  width: 38px;
+  height: 38px;
+}
+
+.logo-icon-img--phone {
+  width: 26px;
+  height: 26px;
+}
+
+.logo-icon-img--footer {
+  width: 30px;
+  height: 30px;
+}
+
+
+

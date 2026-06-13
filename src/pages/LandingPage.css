@@ -35,9 +35,9 @@
 }
 
 .landing__logo-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
   background: var(--gradient-primary);
   display: flex;
   align-items: center;
@@ -49,7 +49,7 @@
 .landing__logo-text {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 800;
-  font-size: 1.25rem;
+  font-size: 1.55rem;
   color: var(--text-primary);
 }
 
@@ -237,8 +237,8 @@
 }
 
 .phone__brand-icon {
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;

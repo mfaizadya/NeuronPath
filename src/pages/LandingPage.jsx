@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Zap, Brain, BarChart3, Sparkles, ArrowRight, Shield, Clock, Users, Globe2, Moon, Sun } from 'lucide-react';
+import { Brain, BarChart3, Sparkles, ArrowRight, Shield, Clock, Users, Globe2, Moon, Sun } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import logoSvg from '../assets/logo.svg';
 import './LandingPage.css';
 
 export default function LandingPage() {
@@ -13,7 +14,7 @@ export default function LandingPage() {
         <div className="landing__nav-inner">
           <div className="landing__logo">
             <div className="landing__logo-icon">
-              <Zap size={22} />
+              <img src={logoSvg} alt="NeuronPath Logo" className="logo-icon-img logo-icon-img--landing" />
             </div>
             <span className="landing__logo-text">NeuronPath</span>
           </div>
@@ -69,7 +70,7 @@ export default function LandingPage() {
                 </div>
                 <div className="phone__brand">
                   <div className="phone__brand-icon">
-                    <Zap size={17} />
+                    <img src={logoSvg} alt="NeuronPath Logo" className="logo-icon-img logo-icon-img--phone" />
                   </div>
                   <div>
                     <strong>NeuronPath</strong>
@@ -205,7 +206,9 @@ export default function LandingPage() {
       <footer className="landing__footer">
         <div className="landing__footer-inner">
           <div className="landing__footer-brand">
-            <Zap size={18} />
+            <div className="landing__logo-icon" style={{ width: '42px', height: '42px', borderRadius: '8px' }}>
+              <img src={logoSvg} alt="NeuronPath Logo" className="logo-icon-img logo-icon-img--footer" />
+            </div>
             <span>NeuronPath</span>
           </div>
           <p>Copyright 2026 NeuronPath. Software Engineering for Startup.</p>

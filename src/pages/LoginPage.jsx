@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getFirebaseErrorMessage } from '../utils/firebaseErrors';
-import { Zap, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
+import logoSvg from '../assets/logo.svg';
 import './AuthPages.css';
 
 export default function LoginPage() {
@@ -43,7 +44,7 @@ export default function LoginPage() {
 
       <div className="auth-container animate-fade-in">
         <Link to="/" className="auth-logo">
-          <div className="auth-logo__icon"><Zap size={22} /></div>
+          <div className="auth-logo__icon"><img src={logoSvg} alt="NeuronPath Logo" className="logo-icon-img" /></div>
           <span className="auth-logo__text">NeuronPath</span>
         </Link>
 

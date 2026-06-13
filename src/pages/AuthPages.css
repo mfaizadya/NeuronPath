@@ -132,9 +132,9 @@
 }
 
 .auth-logo__icon {
-  width: 42px;
-  height: 42px;
-  border-radius: var(--radius-md);
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
   background: var(--gradient-primary);
   display: flex;
   align-items: center;
@@ -147,7 +147,7 @@
 .auth-logo__text {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.85rem;
   color: var(--text-primary);
   letter-spacing: -0.5px;
 }

@@ -9,7 +9,6 @@ import {
   UserCircle,
   LogOut,
   Menu,
-  Zap,
   ChevronRight,
   MessageSquare,
   Sun,
@@ -19,6 +18,7 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import UpgradeModal from '../components/UpgradeModal';
 import ChatWidget from '../components/ChatWidget';
+import logoSvg from '../assets/logo.svg';
 import './MainLayout.css';
 
 const navItems = [
@@ -60,7 +60,7 @@ export default function MainLayout() {
         <div className="sidebar__header">
           <button className="sidebar__logo" onClick={() => navigate('/dashboard')} aria-label="Ke Dashboard">
             <div className="sidebar__logo-icon">
-              <Zap size={24} />
+              <img src={logoSvg} alt="NeuronPath Logo" className="logo-icon-img" />
             </div>
             <div className="sidebar__logo-text">
               <span className="sidebar__brand">NeuronPath</span>
