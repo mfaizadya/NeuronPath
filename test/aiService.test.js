@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createConsultationSession } from '../src/services/aiService';
 
+//AI
+
 describe('AI Service', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -23,7 +25,7 @@ describe('AI Service', () => {
 
     const session = createConsultationSession({ username: 'Budi' });
     const reply = await session.sendMessage('Test');
-    
+
     expect(reply).toBe('Halo dari AI!');
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
     expect(session.history.length).toBe(3); // system, user, assistant
@@ -48,7 +50,7 @@ describe('AI Service', () => {
 
     const session = createConsultationSession({});
     const reply = await session.sendMessage('Test');
-    
+
     expect(reply).toBe('Maaf, saya tidak bisa memproses permintaan Anda saat ini.');
   });
 });
